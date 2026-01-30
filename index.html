@@ -2,62 +2,186 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Bee Master - My Photos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spelling Bee Master - Luyện Thi Lớp 2</title>
     <style>
-        :root { --primary: #4a90e2; --secondary: #f39c12; --success: #2ecc71; --bg: #fdfcf0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 95%; max-width: 900px; text-align: center; border: 4px solid #f1c40f; }
-        .menu-btns { margin-bottom: 20px; }
-        button { padding: 12px 25px; font-size: 16px; cursor: pointer; border: none; border-radius: 12px; margin: 5px; background: var(--primary); color: white; font-weight: bold; box-shadow: 0 4px #2980b9; }
-        button:hover { transform: translateY(-2px); }
-        .game-box { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        :root {
+            --primary: #4a90e2;
+            --secondary: #f39c12;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --bg: #fdfcf0;
+            --card-bg: #ffffff;
+        }
 
-        /* Practice Mode */
-        .practice-img { width: 400px; height: 300px; object-fit: contain; border-radius: 15px; border: 2px solid #eee; margin-bottom: 15px; }
-        .practice-word { font-size: 50px; font-weight: bold; color: #2c3e50; text-transform: uppercase; margin: 10px 0; letter-spacing: 5px; }
-        .practice-def { font-size: 22px; color: #555; font-style: italic; margin-bottom: 20px; }
-        .timer-text { color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
 
-        /* Testing Mode */
-        .test-img { width: 350px; height: 350px; object-fit: contain; border-radius: 15px; margin-bottom: 20px; }
-        .mic-btn { width: 90px; height: 90px; border-radius: 50%; background: #e74c3c; border: none; color: white; font-size: 35px; cursor: pointer; margin: 20px; box-shadow: 0 5px #c0392b; }
-        .mic-btn.listening { background: #2ecc71; animation: pulse 1.5s infinite; }
+        .container {
+            width: 92%;
+            max-width: 900px;
+            background: var(--card-bg);
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 4px solid #f1c40f;
+            box-sizing: border-box;
+        }
+
+        h1 { color: #d35400; margin-bottom: 15px; font-size: 1.8rem; }
+
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            padding: 12px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 3px #999;
+            flex: 1 1 120px;
+            max-width: 200px;
+        }
+
+        .nav-btn:active { transform: translateY(3px); box-shadow: 0 0 #666; }
+        
+        .btn-practice { background: #27ae60; }
+        .btn-round1 { background: #3498db; }
+        .btn-round2 { background: #9b59b6; }
+
+        .game-area { display: none; animation: fadeIn 0.5s ease; width: 100%; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Practice Style */
+        .practice-card { padding: 15px; border-radius: 15px; background: #fffcf2; border: 2px solid #eee; box-sizing: border-box; }
+        
+        /* Cải thiện hiển thị ảnh cho mobile */
+        .img-display { 
+            width: 100%; 
+            max-width: 500px; 
+            height: auto;
+            max-height: 40vh; /* Giới hạn chiều cao theo màn hình để không bị đẩy xuống quá sâu */
+            object-fit: contain; 
+            border-radius: 12px; 
+            background: #fff; 
+            margin: 0 auto 15px; 
+            border: 1px solid #ddd;
+            display: block;
+        }
+
+        .word-title { 
+            font-size: 36px; 
+            font-weight: 900; 
+            color: #2c3e50; 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            margin: 10px 0; 
+        }
+
+        .def-text { 
+            font-size: 18px; 
+            color: #555; 
+            line-height: 1.4; 
+            font-style: italic; 
+            min-height: 50px; 
+            padding: 0 10px; 
+        }
+        
+        .timer-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 15px 0; overflow: hidden; }
+        .timer-bar { height: 100%; background: var(--secondary); width: 100%; transition: width 1s linear; }
+
+        /* Round Style */
+        .mic-container { margin: 20px 0; }
+        .mic-btn {
+            width: 80px; height: 80px; border-radius: 50%; border: none;
+            background: var(--danger); color: white; font-size: 30px; cursor: pointer;
+            box-shadow: 0 5px #c0392b; transition: 0.2s;
+        }
+        .mic-btn.listening { background: var(--success); box-shadow: 0 0 20px var(--success); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .transcript-box { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px dashed #3498db; margin: 15px 0; font-weight: bold; min-height: 40px; }
-        .feedback { font-size: 26px; font-weight: bold; margin: 15px 0; }
+
+        .transcript-box {
+            background: #f1f2f6; padding: 15px; border-radius: 12px;
+            margin: 15px auto; width: 90%; border: 2px dashed #3498db;
+            font-size: 18px; font-weight: bold; min-height: 30px; color: #2f3542;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .feedback-text { font-size: 20px; font-weight: bold; margin: 15px 0; height: 25px; }
+        .audio-trigger { font-size: 60px; cursor: pointer; color: var(--primary); transition: 0.3s; }
+        
+        .skip-btn { background: #bdc3c7; box-shadow: 0 3px #95a5a6; margin-top: 15px; }
+
+        /* Media Query cho màn hình rất nhỏ */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .word-title { font-size: 28px; letter-spacing: 2px; }
+            .def-text { font-size: 16px; }
+            .img-display { max-height: 35vh; }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🐝 Spelling Bee Master 🐝</h1>
-        <div class="menu-btns">
-            <button onclick="startPractice()" style="background: #27ae60;">📖 TRANG LUYỆN TẬP</button>
-            <button onclick="startRound(1)" style="background: #3498db;">🎯 VÒNG 1: THI ẢNH</button>
-            <button onclick="startRound(2)" style="background: #9b59b6;">🔊 VÒNG 2: THI NGHE</button>
+        <h1>🐝 SPELLING BEE MASTER 🐝</h1>
+        
+        <div class="nav-menu">
+            <button class="nav-btn btn-practice" onclick="initPractice()">📖 LUYỆN TẬP</button>
+            <button class="nav-btn btn-round1" onclick="initRound(1)">🎯 VÒNG 1</button>
+            <button class="nav-btn btn-round2" onclick="initRound(2)">🔊 VÒNG 2</button>
         </div>
 
-        <div id="practice-area" class="game-box">
-            <div id="practice-timer-text" class="timer-text">Tự động chuyển sau: 60s</div>
-            <div id="practice-content"></div>
-            <button onclick="nextPractice()" style="background: var(--secondary);">TIẾP THEO ➔</button>
+        <!-- Practice Section -->
+        <div id="section-practice" class="game-area">
+            <div class="practice-card">
+                <div id="practice-timer-info" style="font-weight: bold; color: var(--danger); margin-bottom: 5px; font-size: 14px;">Tiếp theo trong: 60s</div>
+                <div class="timer-container"><div id="practice-progress" class="timer-bar"></div></div>
+                <div id="practice-body"></div>
+                <button class="nav-btn btn-practice" onclick="manualNextPractice()">TỪ TIẾP THEO ➔</button>
+            </div>
         </div>
 
-        <div id="play-area" class="game-box">
-            <h2 id="round-title"></h2>
+        <!-- Rounds Section -->
+        <div id="section-play" class="game-area">
+            <h2 id="round-display-title" style="color: #34495e; font-size: 1.2rem; margin: 10px 0;"></h2>
             <div id="visual-content"></div>
-            <p>Cấu trúc: <b>TIGER (nghỉ) T-I-G-E-R (nghỉ) TIGER</b></p>
-            <button id="mic-btn" class="mic-btn" onclick="toggleListening()">🎤</button>
-            <div class="transcript-box" id="transcript-box">Sẵn sàng nghe con nói...</div>
-            <div id="feedback" class="feedback"></div>
-            <button onclick="nextQuestion()" style="background:#bdc3c7; font-size: 13px;">Bỏ qua</button>
+            
+            <div class="mic-container">
+                <p style="color: #7f8c8d; font-size: 14px;">Nói: <b>[Từ] - [Đánh vần] - [Từ]</b></p>
+                <button id="mic-btn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
+                <div id="mic-status" style="margin-top: 8px; color: #7f8c8d; font-weight: bold; font-size: 14px;">Bấm Mic để nói</div>
+            </div>
+
+            <div class="transcript-box" id="transcript-display">Đang nghe: ...</div>
+            <div id="round-feedback" class="feedback-text"></div>
+            
+            <button class="nav-btn skip-btn" onclick="nextQuestion()">BỎ QUA</button>
         </div>
     </div>
 
     <script>
-        // HƯỚNG DẪN: Bạn hãy dán URL ảnh vào phần img: "" bên dưới nhé.
         const wordList = [
             {w: "vet", d: "A doctor who takes care of sick animals.", img: "https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/12/vet-logo.jpeg"},
             {w: "chef", d: "A person who cooks food in a restaurant.", img: "https://plus.unsplash.com/premium_vector-1682298101057-5a52c70a669f?q=80&w=866&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
@@ -96,7 +220,7 @@
             {w: "firefighter", d: "A person who puts out fires.", img: "https://static.vecteezy.com/system/resources/previews/047/783/187/non_2x/a-cartoon-firefighter-wearing-a-red-helmet-and-uniform-is-using-a-hose-to-put-out-a-fire-he-is-smiling-and-appears-to-be-happy-to-be-doing-his-job-free-vector.jpg"},
             {w: "astronaut", d: "A person who travels into space.", img: "https://www.shutterstock.com/image-vector/cute-cartoon-astronaut-riding-rocket-600nw-2497377733.jpg"},
             {w: "hopscotch", d: "A game where you hop into squares.", img: "LINK_ANH_HOPSCOTCH"},
-            {w: "playground", d: "An area for children to play.", img: "LINK_ANH_PLAYGROUND"},
+            {w: "playground", d: "An outdoor area for children to play.", img: "LINK_ANH_PLAYGROUND"},
             {w: "kangaroo", d: "An animal that hops and has a pouch.", img: "LINK_ANH_KANGAROO"},
             {w: "sunglasses", d: "Dark glasses to protect your eyes.", img: "LINK_ANH_SUNGLASSES"},
             {w: "cousin", d: "The child of your aunt or uncle.", img: "LINK_ANH_COUSIN"},
@@ -141,119 +265,149 @@
             {w: "afternoon", d: "The time between noon and evening.", img: "LINK_ANH_AFTERNOON"}
         ];
 
-        let currentRound = 0, currentWord = {}, isListening = false, practiceIdx = 0, practiceTimer;
+        let currentMode = ''; 
+        let currentWord = {};
+        let practiceIdx = 0;
+        let practiceTimer, autoNextInterval;
+        let isListening = false;
         let recognition;
 
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
+        // Cấu hình Speech Recognition
+        if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
+            const SpeechRecognition = window.webkitSpeechRecognition || window.speechRecognition;
+            recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.lang = 'en-US';
+
             recognition.onstart = () => {
                 isListening = true;
                 document.getElementById('mic-btn').classList.add('listening');
-                document.getElementById('status-text').innerText = "Đang nghe...";
+                document.getElementById('mic-status').innerText = "Đang nghe...";
             };
-            recognition.onresult = (e) => {
-                const transcript = e.results[0][0].transcript.toLowerCase();
-                document.getElementById('transcript-box').innerText = "Con nói: " + transcript;
-                validateBeeStrict(transcript);
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                document.getElementById('transcript-display').innerText = "Con nói: " + transcript;
+                validateSpeech(transcript);
             };
+
             recognition.onend = () => {
                 isListening = false;
                 document.getElementById('mic-btn').classList.remove('listening');
+                document.getElementById('mic-status').innerText = "Bấm để nói lại";
             };
         }
 
-        function startPractice() {
-            hideAll();
-            document.getElementById('practice-area').style.display = 'block';
-            showPractice();
+        function hideAll() {
+            document.querySelectorAll('.game-area').forEach(el => el.style.display = 'none');
+            clearInterval(practiceTimer);
+            clearInterval(autoNextInterval);
+            window.speechSynthesis.cancel();
         }
 
-        function showPractice() {
+        function initPractice() {
+            hideAll();
+            currentMode = 'practice';
+            document.getElementById('section-practice').style.display = 'block';
+            renderPractice();
+        }
+
+        function renderPractice() {
             clearInterval(practiceTimer);
-            const wordObj = wordList[practiceIdx];
-            const content = document.getElementById('practice-content');
+            clearInterval(autoNextInterval);
             
-            content.innerHTML = `
-                <img src="${wordObj.img}" class="practice-img" onerror="this.src='https://placehold.co/400x300?text=Chua+Co+Anh'">
-                <div class="practice-word">${wordObj.w}</div>
-                <div class="practice-def">${wordObj.d}</div>
+            const item = wordList[practiceIdx];
+            const body = document.getElementById('practice-body');
+            body.innerHTML = `
+                <img src="${item.img}" class="img-display" onerror="this.src='https://placehold.co/500x350?text=Chua+Co+Anh'">
+                <div class="word-title">${item.w}</div>
+                <div class="def-text">${item.d}</div>
             `;
-            
-            const utter = new SpeechSynthesisUtterance(`${wordObj.w}. ${wordObj.d}`);
-            utter.rate = 0.7; utter.lang = 'en-US';
-            window.speechSynthesis.speak(utter);
+
+            speakText(`${item.w}. ${item.d}`, 0.7);
 
             let timeLeft = 60;
-            document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
-            practiceTimer = setInterval(() => {
+            const progress = document.getElementById('practice-progress');
+            progress.style.width = '100%';
+
+            autoNextInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
-                if(timeLeft <= 0) nextPractice();
+                progress.style.width = (timeLeft / 60 * 100) + '%';
+                document.getElementById('practice-timer-info').innerText = `Tiếp theo trong: ${timeLeft}s`;
+                if (timeLeft <= 0) manualNextPractice();
             }, 1000);
         }
 
-        function nextPractice() {
+        function manualNextPractice() {
             practiceIdx = (practiceIdx + 1) % wordList.length;
-            showPractice();
+            renderPractice();
         }
 
-        function startRound(r) {
+        function initRound(round) {
             hideAll();
-            currentRound = r;
-            document.getElementById('play-area').style.display = 'block';
+            currentMode = 'round' + round;
+            document.getElementById('section-play').style.display = 'block';
             nextQuestion();
         }
 
         function nextQuestion() {
-            document.getElementById('feedback').innerText = "";
+            document.getElementById('round-feedback').innerText = "";
+            document.getElementById('transcript-display').innerText = "...";
             currentWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-            if (currentRound === 1) {
-                document.getElementById('round-title').innerText = "Vòng 1: Nhìn Tranh";
-                document.getElementById('visual-content').innerHTML = `<img src="${currentWord.img}" class="test-img">`;
+            const title = document.getElementById('round-display-title');
+            const visual = document.getElementById('visual-content');
+
+            if (currentMode === 'round1') {
+                title.innerText = "Vòng 1: Nhìn Tranh Đoán Từ";
+                visual.innerHTML = `<img src="${currentWord.img}" class="img-display" style="max-height:30vh;">`;
             } else {
-                document.getElementById('round-title').innerText = "Vòng 2: Nghe Định Nghĩa";
-                document.getElementById('visual-content').innerHTML = `<div style="font-size:80px; cursor:pointer;" onclick="speakJudge()">🔊</div>`;
+                title.innerText = "Vòng 2: Nghe Định Nghĩa";
+                visual.innerHTML = `
+                    <div class="audio-trigger" onclick="speakJudge()">🔊</div>
+                    <p style="font-weight:bold; font-size:14px;">Bấm loa để nghe</p>
+                `;
                 speakJudge();
             }
         }
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(`Your word is: ${currentWord.w}. Definition: ${currentWord.d}.`);
-            msg.rate = 0.7; msg.lang = 'en-US';
-            window.speechSynthesis.speak(msg);
+            speakText(`Your word is: ${currentWord.w}. Definition: ${currentWord.d}.`, 0.7);
         }
 
-        function toggleListening() {
+        function toggleSpeech() {
+            if (!recognition) return alert("Trình duyệt không hỗ trợ Micro.");
             if (isListening) recognition.stop();
             else recognition.start();
         }
 
-        function validateBeeStrict(transcript) {
+        function validateSpeech(transcript) {
             const word = currentWord.w.toLowerCase();
-            const f = document.getElementById('feedback');
+            const feedback = document.getElementById('round-feedback');
+            const cleanTranscript = transcript.replace(/[^a-z]/g, ' ').trim();
+            const wordsArray = cleanTranscript.split(/\s+/);
+            const keywordOccurrences = wordsArray.filter(v => v === word).length;
             
-            // Logic: Phải nghe thấy từ khóa xuất hiện và độ dài đủ lớn (để chứng minh có bước đánh vần)
-            if (transcript.includes(word) && transcript.length > word.length + 3) {
-                f.innerText = "CHÍNH XÁC! 🌟"; f.style.color = "green";
-                const p = new SpeechSynthesisUtterance("Well done!");
-                window.speechSynthesis.speak(p);
-                setTimeout(nextQuestion, 2500);
+            if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
+                feedback.innerText = "CHÍNH XÁC! 🌟";
+                feedback.style.color = "green";
+                speakText("Excellent!", 0.9);
+                setTimeout(nextQuestion, 2000);
             } else {
-                f.innerText = "Con nói lại cấu trúc: TỪ - ĐÁNH VẦN - TỪ nhé!";
-                f.style.color = "red";
+                feedback.innerText = "Nói lại: Từ - Đánh vần - Từ";
+                feedback.style.color = "red";
             }
         }
 
-        function hideAll() {
-            document.getElementById('practice-area').style.display = 'none';
-            document.getElementById('play-area').style.display = 'none';
-            clearInterval(practiceTimer);
-            window.speechSynthesis.cancel();
+        function speakText(text, rate) {
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = rate;
+            window.speechSynthesis.speak(utter);
         }
+
+        window.onload = initPractice;
     </script>
 </body>
 </html>
