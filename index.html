@@ -3,218 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Bee Pro - Lớp 2</title>
+    <title>Spelling Bee Master - My Photos</title>
     <style>
         :root { --primary: #4a90e2; --secondary: #f39c12; --success: #2ecc71; --bg: #fdfcf0; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 95%; max-width: 850px; text-align: center; border: 4px solid #f1c40f; }
-        h1 { color: #d35400; margin-bottom: 5px; }
-        .menu-btns { margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
-        button { padding: 12px 20px; font-size: 15px; cursor: pointer; border: none; border-radius: 12px; transition: 0.2s; margin: 5px; background: var(--primary); color: white; font-weight: bold; box-shadow: 0 4px #2980b9; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 95%; max-width: 900px; text-align: center; border: 4px solid #f1c40f; }
+        .menu-btns { margin-bottom: 20px; }
+        button { padding: 12px 25px; font-size: 16px; cursor: pointer; border: none; border-radius: 12px; margin: 5px; background: var(--primary); color: white; font-weight: bold; box-shadow: 0 4px #2980b9; }
         button:hover { transform: translateY(-2px); }
         .game-box { display: none; margin-top: 20px; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        /* Chế độ Luyện tập */
-        .practice-word { font-size: 40px; color: #2c3e50; margin: 10px 0; text-transform: uppercase; letter-spacing: 5px; }
-        .practice-def { font-size: 20px; color: #7f8c8d; font-style: italic; margin-bottom: 20px; padding: 0 20px; }
-        .auto-timer { font-size: 14px; color: #e74c3c; font-weight: bold; }
 
-        /* Mic & Thi */
-        .word-img { width: 300px; height: 300px; object-fit: contain; border-radius: 15px; background: #fff; border: 2px solid #eee; margin-bottom: 10px; }
-        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #e74c3c; border: none; color: white; font-size: 30px; cursor: pointer; margin: 20px; box-shadow: 0 4px #c0392b; }
-        .mic-btn.listening { background: #2ecc71; animation: pulse 1.5s infinite; box-shadow: 0 0 20px #2ecc71; }
+        /* Practice Mode */
+        .practice-img { width: 400px; height: 300px; object-fit: contain; border-radius: 15px; border: 2px solid #eee; margin-bottom: 15px; }
+        .practice-word { font-size: 50px; font-weight: bold; color: #2c3e50; text-transform: uppercase; margin: 10px 0; letter-spacing: 5px; }
+        .practice-def { font-size: 22px; color: #555; font-style: italic; margin-bottom: 20px; }
+        .timer-text { color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
+
+        /* Testing Mode */
+        .test-img { width: 350px; height: 350px; object-fit: contain; border-radius: 15px; margin-bottom: 20px; }
+        .mic-btn { width: 90px; height: 90px; border-radius: 50%; background: #e74c3c; border: none; color: white; font-size: 35px; cursor: pointer; margin: 20px; box-shadow: 0 5px #c0392b; }
+        .mic-btn.listening { background: #2ecc71; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        
-        .transcript-box { background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed #ccc; min-height: 40px; font-weight: bold; }
-        .feedback { font-size: 24px; font-weight: bold; margin-top: 15px; }
-        .audio-icon { font-size: 50px; cursor: pointer; color: var(--primary); margin: 10px; display: inline-block; }
+        .transcript-box { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px dashed #3498db; margin: 15px 0; font-weight: bold; min-height: 40px; }
+        .feedback { font-size: 26px; font-weight: bold; margin: 15px 0; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🐝 Spelling Bee Master </h1>
+        <h1>🐝 Spelling Bee Master 🐝</h1>
         <div class="menu-btns">
-            <button onclick="startPractice()" style="background: #27ae60;">📖 Trang Luyện Tập</button>
-            <button onclick="startRound(1)" style="background: #3498db;">Vòng 1: Nhìn Tranh</button>
-            <button onclick="startRound(2)" style="background: #9b59b6;">Vòng 2: Nghe Định Nghĩa</button>
+            <button onclick="startPractice()" style="background: #27ae60;">📖 TRANG LUYỆN TẬP</button>
+            <button onclick="startRound(1)" style="background: #3498db;">🎯 VÒNG 1: THI ẢNH</button>
+            <button onclick="startRound(2)" style="background: #9b59b6;">🔊 VÒNG 2: THI NGHE</button>
         </div>
 
-        <hr style="border: 1px solid #eee; width: 100%;">
-
         <div id="practice-area" class="game-box">
-            <div class="auto-timer" id="practice-timer">Tự động chuyển sau: 60s</div>
+            <div id="practice-timer-text" class="timer-text">Tự động chuyển sau: 60s</div>
             <div id="practice-content"></div>
-            <button onclick="nextPractice()" style="background: var(--secondary);">Từ tiếp theo ➔</button>
+            <button onclick="nextPractice()" style="background: var(--secondary);">TIẾP THEO ➔</button>
         </div>
 
         <div id="play-area" class="game-box">
             <h2 id="round-title"></h2>
             <div id="visual-content"></div>
-            
-            <p id="instruction">Nhấn Mic và nói: <b>"Word, W-O-R-D, Word"</b></p>
-            
+            <p>Cấu trúc: <b>TIGER (nghỉ) T-I-G-E-R (nghỉ) TIGER</b></p>
             <button id="mic-btn" class="mic-btn" onclick="toggleListening()">🎤</button>
-            <div id="status-text" style="color: #7f8c8d;">Bấm mic để nói</div>
-            
-            <div class="transcript-box" id="transcript-box">Con hãy nói...</div>
+            <div class="transcript-box" id="transcript-box">Sẵn sàng nghe con nói...</div>
             <div id="feedback" class="feedback"></div>
-            <button onclick="nextQuestion()" style="background:#bdc3c7; box-shadow: none; font-size: 13px;">Bỏ qua từ này</button>
+            <button onclick="nextQuestion()" style="background:#bdc3c7; font-size: 13px;">Bỏ qua</button>
         </div>
     </div>
 
     <script>
-        // Danh sách 80 từ gốc của bạn
+        // HƯỚNG DẪN: Bạn hãy dán URL ảnh vào phần img: "" bên dưới nhé.
         const wordList = [
-            {w: "vet", d: "A doctor who takes care of sick animals."},
-            {w: "chef", d: "A person who cooks food in a restaurant."},
-            {w: "river", d: "A long, flowing body of water that goes to the sea."},
-            {w: "cake", d: "A sweet, baked dessert, usually for birthdays."},
-            {w: "soda", d: "A sweet, fizzy drink with bubbles."},
-            {w: "socks", d: "Clothing you wear on your feet inside shoes."},
-            {w: "bank", d: "A place where people keep their money."},
-            {w: "milk", d: "A white liquid that comes from cows."},
-            {w: "tiger", d: "A large orange wild cat with black stripes."},
-            {w: "zebra", d: "An animal that looks like a horse with black and white stripes."},
-            {w: "field", d: "A wide area of land with grass."},
-            {w: "juice", d: "A drink made from fruits like oranges."},
-            {w: "bread", d: "A food made from flour and water, baked in an oven."},
-            {w: "sleet", d: "A mix of rain and half-frozen snow."},
-            {w: "pizza", d: "Round flat bread with cheese and tomato."},
-            {w: "ocean", d: "A very large body of salt water."},
-            {w: "gift", d: "Something you give to someone on a special day."},
-            {w: "mask", d: "Something you wear to cover your face."},
-            {w: "pilot", d: "A person who flies an airplane."},
-            {w: "scarf", d: "A cloth you wear around your neck to stay warm."},
-            {w: "nurse", d: "A person who helps doctors take care of sick people."},
-            {w: "aunt", d: "The sister of your father or mother."},
-            {w: "store", d: "A place where you go to buy things."},
-            {w: "soccer", d: "A sport where you kick a ball into a goal."},
-            {w: "party", d: "A fun gathering to celebrate something."},
-            {w: "train", d: "A vehicle that travels on tracks."},
-            {w: "salad", d: "A mix of raw vegetables like lettuce."},
-            {w: "school", d: "A place where children go to learn."},
-            {w: "lizard", d: "A small reptile with a long tail."},
-            {w: "desert", d: "A very dry place with lots of sand."},
-            {w: "candle", d: "A stick of wax that gives light."},
-            {w: "burger", d: "A sandwich with a meat patty inside."},
-            {w: "market", d: "A place where people buy and sell food."},
-            {w: "sausage", d: "Meat shaped like a tube."},
-            {w: "firefighter", d: "A person who puts out fires."},
-            {w: "astronaut", d: "A person who travels into space."},
-            {w: "hopscotch", d: "A game where you hop into squares."},
-            {w: "playground", d: "An outdoor area for children to play."},
-            {w: "kangaroo", d: "An animal that hops and has a pouch."},
-            {w: "sunglasses", d: "Dark glasses to protect your eyes from the sun."},
-            {w: "cousin", d: "The child of your aunt or uncle."},
-            {w: "uncle", d: "The brother of your father or mother."},
-            {w: "cleaner", d: "A person whose job is to clean buildings."},
-            {w: "tennis", d: "A sport played with rackets and a yellow ball."},
-            {w: "cheetah", d: "The fastest land animal with spots."},
-            {w: "violin", d: "A musical instrument with four strings."},
-            {w: "piano", d: "A large instrument with black and white keys."},
-            {w: "gloves", d: "Clothing worn on the hands to stay warm."},
-            {w: "sweater", d: "A warm piece of clothing for your upper body."},
-            {w: "sandals", d: "Light shoes with straps worn in summer."},
-            {w: "subway", d: "An underground train system."},
-            {w: "whistle", d: "A tool that makes a high sound when blown."},
-            {w: "tablet", d: "A small flat computer with a touch screen."},
-            {w: "dentist", d: "A doctor for your teeth."},
-            {w: "doctor", d: "A person who helps you when you are sick."},
-            {w: "factory", d: "A building where things are made by machines."},
-            {w: "traffic", d: "Many cars moving on the road."},
-            {w: "elephant", d: "A very large grey animal with a trunk."},
-            {w: "flower", d: "The colorful part of a plant."},
-            {w: "tornado", d: "A strong spinning wind storm."},
-            {w: "outback", d: "The wild dry land in Australia."},
-            {w: "rainbow", d: "A colorful arch in the sky after rain."},
-            {w: "popcorn", d: "A snack made from corn kernels."},
-            {w: "morning", d: "The first part of the day."},
-            {w: "triangle", d: "A shape with three sides."},
-            {w: "evening", d: "The time of day when it gets dark."},
-            {w: "diamond", d: "A shape with four sides or a hard gem."},
-            {w: "zookeeper", d: "A person who takes care of zoo animals."},
-            {w: "birthday", d: "The day you were born."},
-            {w: "restaurant", d: "A place where you go to eat meals."},
-            {w: "helicopter", d: "An aircraft with spinning blades on top."},
-            {w: "aquarium", d: "A place where you see sea animals."},
-            {w: "lightning", d: "A flash of electricity in the sky."},
-            {w: "mountain", d: "A very high part of the land."},
-            {w: "cafeteria", d: "A place in school where students eat."},
-            {w: "backpack", d: "A bag you carry on your back."},
-            {w: "butterfly", d: "An insect with colorful wings."},
-            {w: "chocolate", d: "A sweet brown food from cocoa beans."},
-            {w: "rectangle", d: "A shape with four sides like a long square."},
-            {w: "afternoon", d: "The time between noon and evening."}
+            {w: "vet", d: "A doctor who takes care of sick animals.", img: "https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/12/vet-logo.jpeg"},
+            {w: "chef", d: "A person who cooks food in a restaurant.", img: "https://plus.unsplash.com/premium_vector-1682298101057-5a52c70a669f?q=80&w=866&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
+            {w: "river", d: "A long, flowing body of water.", img: "https://static.toiimg.com/thumb/116331344/River-destinations-in-India.jpg?width=636&height=358&resize=4"},
+            {w: "cake", d: "A sweet baked dessert for birthdays.", img: "https://plus.unsplash.com/premium_photo-1713447395823-2e0b40b75a89?q=80&w=682&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
+            {w: "soda", d: "A sweet, bubbly drink.", img: "https://images.squarespace-cdn.com/content/v1/5c4b37d2365f0291e539e6bd/1548434619978-XAL2Z552XTDSADA9AHXD/image-asset.jpeg?format=2500w"},
+            {w: "socks", d: "You wear these on your feet inside shoes.", img: "https://www.crazysocks.com/cdn/shop/products/rainbow-metallic-socks-small_400x.jpg?v=1595977722"},
+            {w: "bank", d: "A place where people keep their money.", img: "https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-regulatory-office-currency-bank-financial-sector-png-image_368241.jpg"},
+            {w: "milk", d: "A white drink that comes from cows.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYbO8jhE0xgrENfXeS6H6K_a08oLL9s5cyeg&s"},
+            {w: "tiger", d: "A large orange wild cat with stripes.", img: "https://media.istockphoto.com/id/1420676204/photo/portrait-of-a-royal-bengal-tiger-alert-and-staring-at-the-camera-national-animal-of-bangladesh.jpg?s=612x612&w=0&k=20&c=0OCYv99Ktv3fJ-YYlg7SetHBJj3pIk58WY7GDy5VCtI="},
+            {w: "zebra", d: "An animal with black and white stripes.", img: "https://img.freepik.com/free-vector/cute-zebra-cartoon-vector-illustration_1308-180723.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "field", d: "A wide area of land with grass.", img: "https://media.istockphoto.com/id/1421187500/photo/a-field-of-corn-at-dusk.jpg?s=612x612&w=0&k=20&c=Mv220j7hl1_pX1SvViqk3noNJPF1SkDZQiBDX1gO44w="},
+            {w: "juice", d: "A drink made from fruits like oranges.", img: "https://media.istockphoto.com/id/158268808/photo/fresh-citrus-juices.jpg?s=612x612&w=0&k=20&c=vflsrO3KXXtWfpOOzNZdBVgeIpLy21-OSUl-QPSgPmU="},
+            {w: "bread", d: "A food made from flour and baked.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOfoIt9rHlWEvEQlIJpYLyUMEpOttn_Q9nEQ&s"},
+            {w: "sleet", d: "A mix of rain and frozen snow.", img: "https://cdn.britannica.com/67/123867-050-9D287BC3/Sleet-ground.jpg"},
+            {w: "pizza", d: "A round bread with cheese and tomato.", img: "https://img.freepik.com/free-photo/pizza-pizza-filled-with-tomatoes-salami-olives_140725-1200.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "ocean", d: "A very large body of salt water.", img: "https://www.greenpeace.org/static/planet4-aotearoa-stateless/2023/11/07eba586-gp1t6j5o_web_size.jpg"},
+            {w: "gift", d: "Something you give on a special day.", img: "https://images.pexels.com/photos/264787/pexels-photo-264787.jpeg?cs=srgb&dl=pexels-pixabay-264787.jpg&fm=jpg"},
+            {w: "mask", d: "Something you wear to cover your face.", img: "https://dictionary.cambridge.org/vi/images/thumb/mask_noun_002_22549.jpg?version=6.0.71"},
+            {w: "pilot", d: "A person who flies an airplane.", img: "https://media.istockphoto.com/id/2152453318/photo/confident-female-pilot-by-private-jet.jpg?s=612x612&w=0&k=20&c=gFRL-_1Jm5L-cgCpB90k7tSSq6LjwaXjl-OLB_PtpqU="},
+            {w: "scarf", d: "A cloth you wear to stay warm.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNFR_eLICJEddavF5FSe2uwxw4gr8jfzoJyw&s"},
+            {w: "nurse", d: "A person who helps sick people.", img: "https://media.vov.vn/sites/default/files/styles/large/public/2022-05/3621_dieu_duong.jpg"},
+            {w: "aunt", d: "The sister of your father or mother.", img: "https://i.postimg.cc/TPCPXfsY/Screenshot-2026-01-30-at-13-18-37.png"},
+            {w: "store", d: "A place where you go to buy things.", img: "https://static.vecteezy.com/system/resources/previews/041/641/848/non_2x/shop-store-icon-storefront-building-supermarket-shopping-symbol-flat-illustration-vector.jpg"},
+            {w: "soccer", d: "A sport where you kick a ball.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT84p2do_-aVUPAjNRqDQ1xsMyOIskyAXy0TA&s"},
+            {w: "party", d: "A fun gathering to celebrate.", img: "LINK_ANH_PARTY"},
+            {w: "train", d: "A vehicle that travels on tracks.", img: "https://media.istockphoto.com/id/466506979/photo/indian-passenger-train.jpg?s=612x612&w=0&k=20&c=AKcMyvqsam93AnADQaK4hzAMI9bdWOVd8tKoF5Sf10M="},
+            {w: "salad", d: "A mix of raw vegetables.", img: "https://png.pngtree.com/png-vector/20240913/ourmid/pngtree-salad-png-image_12807016.png"},
+            {w: "school", d: "A place where children go to learn.", img: "https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/465927299_9497212406973727_8825375467049598245_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFJr1RJHVlvimY0wLSwDokWP5Em_46VzNU_kSb_jpXM1aKtUK4IbfAvgwKh9gG3hqbqWlGFLfn5PKDUxaSx6C-e&_nc_ohc=LMvo7tNapMgQ7kNvwEb-WKS&_nc_oc=AdkHDz4Z_o71G5lZK8RHTQFuclRO-FMP84SkvWO66nwac9aekrLTisRLlvhx1r94SpY&_nc_zt=23&_nc_ht=scontent.fhan5-9.fna&_nc_gid=Upe8v3gPYGCyYqUIm_Dp3A&oh=00_AfpXaQpsvcMdWw-9FfW8xIDwMJ8FLAEbDjZRWqKSanF7Ow&oe=698222B2"},
+            {w: "lizard", d: "A small reptile with a long tail.", img: "https://i.pinimg.com/736x/fb/86/c7/fb86c7e0ecb7104a5e4c11b5fa212920.jpg"},
+            {w: "desert", d: "A very dry place with lots of sand.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN99JwgRDUW5uGqUIVIlb0hvs31FAW6zdi4w&s"},
+            {w: "candle", d: "A stick of wax that gives light.", img: "https://www.shutterstock.com/shutterstock/videos/1107230139/thumb/7.jpg?ip=x480"},
+            {w: "burger", d: "A sandwich with a meat patty.", img: "https://img.freepik.com/free-psd/hand-drawn-burger-illustration_23-2151600197.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "market", d: "A place where people buy food.", img: "https://media.istockphoto.com/id/482806537/vector/market.jpg?s=612x612&w=0&k=20&c=AxYKwT2mH4aCumgTpqbQXtojjNlN4pUNbmuePwDFvPY="},
+            {w: "sausage", d: "Meat shaped like a long tube.", img: "https://img.freepik.com/free-vector/hand-drawn-meat-cartoon-illustration_23-2150621184.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "firefighter", d: "A person who puts out fires.", img: "https://static.vecteezy.com/system/resources/previews/047/783/187/non_2x/a-cartoon-firefighter-wearing-a-red-helmet-and-uniform-is-using-a-hose-to-put-out-a-fire-he-is-smiling-and-appears-to-be-happy-to-be-doing-his-job-free-vector.jpg"},
+            {w: "astronaut", d: "A person who travels into space.", img: "https://www.shutterstock.com/image-vector/cute-cartoon-astronaut-riding-rocket-600nw-2497377733.jpg"},
+            {w: "hopscotch", d: "A game where you hop into squares.", img: "LINK_ANH_HOPSCOTCH"},
+            {w: "playground", d: "An area for children to play.", img: "LINK_ANH_PLAYGROUND"},
+            {w: "kangaroo", d: "An animal that hops and has a pouch.", img: "LINK_ANH_KANGAROO"},
+            {w: "sunglasses", d: "Dark glasses to protect your eyes.", img: "LINK_ANH_SUNGLASSES"},
+            {w: "cousin", d: "The child of your aunt or uncle.", img: "LINK_ANH_COUSIN"},
+            {w: "uncle", d: "The brother of your father or mother.", img: "LINK_ANH_UNCLE"},
+            {w: "cleaner", d: "A person whose job is to clean.", img: "LINK_ANH_CLEANER"},
+            {w: "tennis", d: "A sport with rackets and a yellow ball.", img: "LINK_ANH_TENNIS"},
+            {w: "cheetah", d: "The fastest land animal with spots.", img: "LINK_ANH_CHEETAH"},
+            {w: "violin", d: "A musical instrument with strings.", img: "LINK_ANH_VIOLIN"},
+            {w: "piano", d: "A large instrument with black/white keys.", img: "LINK_ANH_PIANO"},
+            {w: "gloves", d: "Clothing worn on the hands.", img: "LINK_ANH_GLOVES"},
+            {w: "sweater", d: "Warm clothing for your upper body.", img: "LINK_ANH_SWEATER"},
+            {w: "sandals", d: "Light shoes worn in summer.", img: "LINK_ANH_SANDALS"},
+            {w: "subway", d: "An underground train system.", img: "LINK_ANH_SUBWAY"},
+            {w: "whistle", d: "A tool that makes a high sound.", img: "LINK_ANH_WHISTLE"},
+            {w: "tablet", d: "A small flat computer with touch.", img: "LINK_ANH_TABLET"},
+            {w: "dentist", d: "A doctor for your teeth.", img: "LINK_ANH_DENTIST"},
+            {w: "doctor", d: "A person who helps sick people.", img: "LINK_ANH_DOCTOR"},
+            {w: "factory", d: "A building where things are made.", img: "LINK_ANH_FACTORY"},
+            {w: "traffic", d: "Many cars moving on the road.", img: "LINK_ANH_TRAFFIC"},
+            {w: "elephant", d: "A very large animal with a trunk.", img: "LINK_ANH_ELEPHANT"},
+            {w: "flower", d: "The colorful part of a plant.", img: "LINK_ANH_FLOWER"},
+            {w: "tornado", d: "A strong spinning wind storm.", img: "LINK_ANH_TORNADO"},
+            {w: "outback", d: "Wild dry land in Australia.", img: "LINK_ANH_OUTBACK"},
+            {w: "rainbow", d: "A colorful arch in the sky.", img: "LINK_ANH_RAINBOW"},
+            {w: "popcorn", d: "A snack made from corn.", img: "LINK_ANH_POPCORN"},
+            {w: "morning", d: "The first part of the day.", img: "LINK_ANH_MORNING"},
+            {w: "triangle", d: "A shape with three sides.", img: "LINK_ANH_TRIANGLE"},
+            {w: "evening", d: "The time when it gets dark.", img: "LINK_ANH_EVENING"},
+            {w: "diamond", d: "A shape with 4 sides or a gem.", img: "LINK_ANH_DIAMOND"},
+            {w: "zookeeper", d: "A person who cares for zoo animals.", img: "LINK_ANH_ZOOKEEPER"},
+            {w: "birthday", d: "The day you were born.", img: "LINK_ANH_BIRTHDAY"},
+            {w: "restaurant", d: "A place where you eat meals.", img: "LINK_ANH_RESTAURANT"},
+            {w: "helicopter", d: "An aircraft with spinning blades.", img: "LINK_ANH_HELICOPTER"},
+            {w: "aquarium", d: "A place where you see sea animals.", img: "LINK_ANH_AQUARIUM"},
+            {w: "lightning", d: "A flash of light in the sky.", img: "LINK_ANH_LIGHTNING"},
+            {w: "mountain", d: "A very high part of the land.", img: "LINK_ANH_MOUNTAIN"},
+            {w: "cafeteria", d: "A place in school where you eat.", img: "LINK_ANH_CAFETERIA"},
+            {w: "backpack", d: "A bag you carry on your back.", img: "LINK_ANH_BACKPACK"},
+            {w: "butterfly", d: "An insect with colorful wings.", img: "LINK_ANH_BUTTERFLY"},
+            {w: "chocolate", d: "A sweet brown food from cocoa.", img: "LINK_ANH_CHOCOLATE"},
+            {w: "rectangle", d: "A shape like a long square.", img: "LINK_ANH_RECTANGLE"},
+            {w: "afternoon", d: "The time between noon and evening.", img: "LINK_ANH_AFTERNOON"}
         ];
 
         let currentRound = 0, currentWord = {}, isListening = false, practiceIdx = 0, practiceTimer;
         let recognition;
 
-        // Cấu hình Nhận diện giọng nói
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.lang = 'en-US';
-
             recognition.onstart = () => {
                 isListening = true;
                 document.getElementById('mic-btn').classList.add('listening');
                 document.getElementById('status-text').innerText = "Đang nghe...";
             };
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript.toLowerCase();
-                document.getElementById('transcript-box').innerText = "Con vừa nói: " + transcript;
-                validateBeeStyle(transcript);
+            recognition.onresult = (e) => {
+                const transcript = e.results[0][0].transcript.toLowerCase();
+                document.getElementById('transcript-box').innerText = "Con nói: " + transcript;
+                validateBeeStrict(transcript);
             };
-
             recognition.onend = () => {
                 isListening = false;
                 document.getElementById('mic-btn').classList.remove('listening');
-                document.getElementById('status-text').innerText = "Bấm để nói lại";
             };
         }
 
-        // --- CHẾ ĐỘ LUYỆN TẬP ---
         function startPractice() {
             hideAll();
             document.getElementById('practice-area').style.display = 'block';
-            showWordInPractice();
+            showPractice();
         }
 
-        function showWordInPractice() {
+        function showPractice() {
             clearInterval(practiceTimer);
             const wordObj = wordList[practiceIdx];
             const content = document.getElementById('practice-content');
+            
             content.innerHTML = `
-                <img src="https://loremflickr.com/400/400/${wordObj.w},cartoon/all" class="word-img">
+                <img src="${wordObj.img}" class="practice-img" onerror="this.src='https://placehold.co/400x300?text=Chua+Co+Anh'">
                 <div class="practice-word">${wordObj.w}</div>
                 <div class="practice-def">${wordObj.d}</div>
             `;
             
-            // Đọc từ và định nghĩa
             const utter = new SpeechSynthesisUtterance(`${wordObj.w}. ${wordObj.d}`);
             utter.rate = 0.7; utter.lang = 'en-US';
             window.speechSynthesis.speak(utter);
 
             let timeLeft = 60;
-            document.getElementById('practice-timer').innerText = `Tự động chuyển sau: ${timeLeft}s`;
-            
+            document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
             practiceTimer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('practice-timer').innerText = `Tự động chuyển sau: ${timeLeft}s`;
+                document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
                 if(timeLeft <= 0) nextPractice();
             }, 1000);
         }
 
         function nextPractice() {
             practiceIdx = (practiceIdx + 1) % wordList.length;
-            showWordInPractice();
+            showPractice();
         }
 
-        // --- CÁC VÒNG THI ---
         function startRound(r) {
             hideAll();
             currentRound = r;
@@ -224,15 +208,14 @@
 
         function nextQuestion() {
             document.getElementById('feedback').innerText = "";
-            document.getElementById('transcript-box').innerText = "Con hãy nói...";
             currentWord = wordList[Math.floor(Math.random() * wordList.length)];
 
             if (currentRound === 1) {
-                document.getElementById('round-title').innerText = "Vòng 1: Nhìn Tranh Đoán Từ";
-                document.getElementById('visual-content').innerHTML = `<img src="https://loremflickr.com/400/400/${currentWord.w},cartoon/all" class="word-img">`;
+                document.getElementById('round-title').innerText = "Vòng 1: Nhìn Tranh";
+                document.getElementById('visual-content').innerHTML = `<img src="${currentWord.img}" class="test-img">`;
             } else {
                 document.getElementById('round-title').innerText = "Vòng 2: Nghe Định Nghĩa";
-                document.getElementById('visual-content').innerHTML = `<div class="audio-icon" onclick="speakJudge()">🔊</div><p>Bấm loa nghe định nghĩa</p>`;
+                document.getElementById('visual-content').innerHTML = `<div style="font-size:80px; cursor:pointer;" onclick="speakJudge()">🔊</div>`;
                 speakJudge();
             }
         }
@@ -249,29 +232,18 @@
             else recognition.start();
         }
 
-        // --- XÁC THỰC CẤU TRÚC WORD - SPELL - WORD ---
-        function validateBeeStyle(transcript) {
+        function validateBeeStrict(transcript) {
             const word = currentWord.w.toLowerCase();
-            const letters = word.split('').join(' '); // "t i g e r"
             const f = document.getElementById('feedback');
             
-            // Chuẩn hóa văn bản nhận diện (xóa dấu gạch ngang, dấu phẩy)
-            const cleanTranscript = transcript.replace(/[-]/g, ' ').replace(/[,.]/g, '');
-
-            // Kiểm tra: Phải chứa từ ít nhất 2 lần và chứa chuỗi đánh vần ở giữa
-            // Ví dụ: "tiger t i g e r tiger"
-            const wordCount = (cleanTranscript.match(new RegExp(`\\b${word}\\b`, 'g')) || []).length;
-            
-            // Một số máy STT nhận diện "T I G E R" thành một từ "tiger" thứ hai
-            // nên ta kiểm tra xem có ít nhất 2 lần từ đó xuất hiện hoặc từ đó xuất hiện và độ dài chuỗi đủ lớn
-            if (wordCount >= 2 || (cleanTranscript.includes(word) && cleanTranscript.length > word.length + 3)) {
-                f.innerText = "Chính xác! Con làm rất tốt! 🌟";
-                f.style.color = "green";
-                const praise = new SpeechSynthesisUtterance("Excellent! Correct spelling.");
-                praise.rate = 0.8; window.speechSynthesis.speak(praise);
-                setTimeout(nextQuestion, 2000);
+            // Logic: Phải nghe thấy từ khóa xuất hiện và độ dài đủ lớn (để chứng minh có bước đánh vần)
+            if (transcript.includes(word) && transcript.length > word.length + 3) {
+                f.innerText = "CHÍNH XÁC! 🌟"; f.style.color = "green";
+                const p = new SpeechSynthesisUtterance("Well done!");
+                window.speechSynthesis.speak(p);
+                setTimeout(nextQuestion, 2500);
             } else {
-                f.innerText = "Chưa đúng cấu trúc. Con hãy nói lại nhé!";
+                f.innerText = "Con nói lại cấu trúc: TỪ - ĐÁNH VẦN - TỪ nhé!";
                 f.style.color = "red";
             }
         }
