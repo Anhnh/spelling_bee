@@ -112,58 +112,114 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .img-display { max-width: 100%; max-height: 30dvh; object-fit: contain; border-radius: 12px; }
+        .img-display { max-width: 100%; max-height: 35dvh; object-fit: contain; border-radius: 12px; }
 
         .word-title { font-size: 32px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px; margin: 10px 0; }
         .def-text { font-size: 16px; color: #555; line-height: 1.4; font-style: italic; margin-bottom: 15px; }
 
         /* Hệ thống Countdown */
-        .timer-info { font-size: 14px; font-weight: bold; color: var(--danger); margin-bottom: 10px; }
+        .timer-info { 
+            font-size: 16px; 
+            font-weight: bold; 
+            color: var(--danger); 
+            margin-bottom: 10px; 
+            background: #fff5f5;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #fed7d7;
+        }
+
         #ready-countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 80px; font-weight: bold; color: var(--secondary);
-            text-shadow: 0 0 20px rgba(255,255,255,0.8);
-            z-index: 10; display: none;
+            font-size: 100px; font-weight: bold; color: var(--secondary);
+            text-shadow: 0 0 30px rgba(255,255,255,1), 0 0 10px rgba(0,0,0,0.2);
+            z-index: 100; display: none;
+            pointer-events: none;
         }
 
         /* Mic & Feedback */
         .mic-section { display: flex; flex-direction: column; align-items: center; margin: 10px 0; }
         .mic-btn {
-            width: 80px; height: 80px; border-radius: 50%; border: none;
-            background: var(--danger); color: white; font-size: 32px;
-            box-shadow: 0 5px #c0392b; cursor: pointer;
+            width: 85px; height: 85px; border-radius: 50%; border: none;
+            background: var(--danger); color: white; font-size: 36px;
+            box-shadow: 0 6px #c0392b; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
         }
-        .mic-btn.listening { background: var(--success); box-shadow: 0 0 20px var(--success); animation: pulse 1.5s infinite; }
+        .mic-btn.listening { background: var(--success); box-shadow: 0 0 25px var(--success); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .transcript-box {
-            background: #f1f4f9; padding: 12px; border-radius: 10px;
-            border: 2px dashed #3498db; font-size: 15px; font-weight: bold;
-            min-height: 40px; margin: 10px 0; width: 100%; color: #34495e;
+            background: #f1f4f9; padding: 15px; border-radius: 12px;
+            border: 2px dashed #3498db; font-size: 16px; font-weight: bold;
+            min-height: 50px; margin: 10px 0; width: 100%; color: #34495e;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
         }
 
-        .feedback-msg { font-size: 18px; font-weight: bold; min-height: 24px; margin: 10px 0; }
+        .feedback-msg { font-size: 20px; font-weight: bold; min-height: 28px; margin: 10px 0; }
 
-        /* Round 4 Memory List */
-        .memory-list { display: flex; flex-direction: column; gap: 15px; }
-        .memory-item { display: flex; align-items: center; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
-        .memory-img { width: 60px; height: 60px; object-fit: contain; border-radius: 5px; margin-right: 15px; }
-        .memory-word { font-size: 20px; font-weight: bold; text-transform: uppercase; color: var(--primary); }
+        /* Vòng 4 Ghi nhớ - Ảnh to gần full màn hình */
+        .memory-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 30px; 
+            padding-bottom: 50px;
+        }
+        .memory-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background: #fff; 
+            padding: 15px; 
+            border-radius: 20px; 
+            border: 2px solid #f0f0f0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .memory-img { 
+            width: 100%; 
+            height: auto; 
+            max-height: 45dvh; 
+            object-fit: contain; 
+            border-radius: 15px; 
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+        .memory-word { 
+            font-size: 32px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            color: var(--primary); 
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+        .memory-def {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 0 10px;
+        }
 
-        .main-btn { width: 100%; padding: 15px; font-size: 16px; font-weight: bold; border: none; border-radius: 12px; color: white; background: var(--primary); box-shadow: 0 4px #2980b9; }
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px #2980b9; }
+        .main-btn { width: 100%; padding: 18px; font-size: 18px; font-weight: bold; border: none; border-radius: 15px; color: white; background: var(--primary); box-shadow: 0 5px #2980b9; }
+        .main-btn:active { transform: translateY(3px); box-shadow: 0 2px #2980b9; }
+
+        /* Loa to ở Vòng 3 */
+        .big-speaker { font-size: 100px; color: var(--primary); cursor: pointer; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Màn hình chào -->
         <div id="welcome-overlay">
             <div style="font-size: 80px;">🐝</div>
             <h1 style="color: #d35400;">Spelling Bee</h1>
             <p>Chào con gái yêu! Sẵn sàng luyện thi chưa nào?</p>
-            <button class="main-btn" style="background: var(--success); box-shadow: 0 5px #27ae60;" onclick="startApp()">BẮT ĐẦU</button>
+            <button class="main-btn" style="background: var(--success); box-shadow: 0 5px #27ae60;" onclick="startApp()">BẮT ĐẦU HỌC</button>
         </div>
 
+        <!-- Thanh Tab gọn nhẹ -->
         <div class="nav-tabs" id="main-nav" style="display: none;">
             <button id="tab-practice" class="tab-btn active" onclick="initPractice()">HỌC</button>
             <button id="tab-round1" class="tab-btn" onclick="initRound(1)">VÒNG 1</button>
@@ -173,41 +229,41 @@
         </div>
 
         <div class="content-area">
-            <!-- Practice -->
+            <!-- PHẦN HỌC (Practice) -->
             <div id="section-practice" class="game-area">
                 <div id="practice-timer-text" class="timer-info">Chuyển sau: 60s</div>
                 <div class="img-wrapper">
                     <img id="p-img" src="" class="img-display">
-                    <div style="position:absolute; bottom:10px; right:10px; background:var(--primary); color:white; border-radius:50%; width:44px; height:44px; display:flex; justify-content:center; align-items:center; cursor:pointer;" onclick="replayPractice()">🔊</div>
+                    <div style="position:absolute; bottom:15px; right:15px; background:var(--primary); color:white; border-radius:50%; width:50px; height:50px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white;" onclick="replayPractice()">🔊</div>
                 </div>
                 <div id="p-word" class="word-title">---</div>
                 <div id="p-def" class="def-text">---</div>
                 <button class="main-btn" onclick="manualNextPractice()">TỪ TIẾP THEO ➔</button>
             </div>
 
-            <!-- Testing Rounds -->
+            <!-- PHẦN THI (Rounds 1, 2, 3) -->
             <div id="section-play" class="game-area">
                 <div id="round-timer-box" class="timer-info">...</div>
-                <div id="round-status-hint" style="font-size: 13px; color: #888; font-weight: bold; margin-bottom: 5px;"></div>
+                <div id="round-status-hint" style="font-size: 14px; color: #555; font-weight: bold; margin-bottom: 10px; background: #eef2ff; padding: 5px; border-radius: 5px;"></div>
                 
                 <div class="img-wrapper">
                     <div id="ready-countdown">3</div>
                     <div id="visual-content" style="width:100%; display:flex; justify-content:center; align-items:center;"></div>
                 </div>
 
-                <div class="mic-section" id="mic-container">
+                <div class="mic-section" id="mic-container" style="display: none;">
                     <button id="mic-btn" class="mic-btn" onclick="requestSpeech()">🎤</button>
-                    <div id="mic-status" style="font-size: 12px; font-weight: bold; color: #aaa; margin-top: 5px;">Bấm để trả lời</div>
+                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #777; margin-top: 8px;">Bấm để trả lời</div>
                 </div>
 
                 <div class="transcript-box" id="transcript-display">...</div>
                 <div id="round-feedback" class="feedback-msg"></div>
-                <button class="main-btn" style="background:#bdc3c7; box-shadow:none; padding:10px; margin-top:auto;" onclick="nextQuestion()">BỎ QUA</button>
+                <button class="main-btn" style="background:#bdc3c7; box-shadow:none; padding:12px; margin-top:auto;" onclick="nextQuestion()">BỎ QUA</button>
             </div>
 
-            <!-- Round 4 Memory -->
+            <!-- PHẦN GHI NHỚ (Round 4) -->
             <div id="section-memory" class="game-area">
-                <div id="memory-timer" class="timer-info" style="font-size: 20px;">Ghi nhớ trong: 60s</div>
+                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 10; border-radius: 0 0 15px 15px;">Ghi nhớ trong: 60s</div>
                 <div id="memory-list" class="memory-list"></div>
             </div>
         </div>
@@ -267,7 +323,7 @@
             {w: "sandals", d: "Light shoes worn in summer.", img: "https://img.freepik.com/premium-vector/adorable-cartoon-sandals-pink-blue-yellow-illustration_1324823-13193.jpg"},
             {w: "subway", d: "An underground train system.", img: "https://t4.ftcdn.co/jpg/03/23/03/35/360_F_323033547_KxnAz5lDWCWqkBicfH7glG9Kinv7WSsh.jpg"},
             {w: "whistle", d: "A tool that makes a high sound.", img: "https://thumbs.dreamstime.com/b/businessman-coach-blow-whistle-concept-illustration-figure-80735055.jpg"},
-            {w: "tablet", d: "A small flat computer with touch.", img: "https://t4.ftcdn.com/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
+            {w: "tablet", d: "A small flat computer with touch.", img: "https://t4.ftcdn.co/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
             {w: "dentist", d: "A doctor for your teeth.", img: "https://media.istockphoto.com/id/914817876/vector/doctor-with-happy-healthy-teeth-vector-illustration.jpg?s=612x612&w=0&k=20&c=7vtPzkyKAPG6ITGT-fchWTe8tn-X2Pi2w70VWlkJKxk="},
             {w: "doctor", d: "A person who helps sick people.", img: "https://www.shutterstock.com/image-vector/male-doctor-smiling-selfconfidence-flat-600nw-2281709217.jpg"},
             {w: "factory", d: "A building where things are made.", img: "https://img.freepik.com/free-vector/city-drains-flat-background-with-factory-urban-landscape-river-pollution-illustration_1284-62760.jpg?semt=ais_hybrid&w=740&q=80"},
@@ -321,7 +377,8 @@
                 isListening = true;
                 fullTranscript = "";
                 document.getElementById('mic-btn').classList.add('listening');
-                document.getElementById('mic-status').innerText = "Máy đang nghe...";
+                document.getElementById('mic-status').innerText = "Đang nghe...";
+                document.getElementById('transcript-display').innerText = "Máy đang lắng nghe con...";
             };
 
             recognition.onresult = (event) => {
@@ -336,7 +393,7 @@
                 }
                 const displayTranscript = (fullTranscript + interimTranscript).toLowerCase();
                 
-                // Ở Vòng 1, không hiển thị transcript khi con đang nói (ẩn tạm thời)
+                // Ở Vòng 1, ẩn transcript khi đang nói
                 if (currentMode !== 'round1') {
                     document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
                 }
@@ -344,7 +401,7 @@
                 silenceTimer = setTimeout(() => {
                     if (isListening) {
                         recognition.stop();
-                        // Khi dừng nói hoàn toàn mới hiển thị transcript cho Vòng 1
+                        // Sau khi dừng mới hiện văn bản cho Vòng 1
                         document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
                         validateSpeech(displayTranscript);
                     }
@@ -448,45 +505,43 @@
             document.getElementById('round-feedback').innerText = "";
             document.getElementById('transcript-display').innerText = "...";
             document.getElementById('mic-container').style.display = 'none';
-            document.getElementById('mic-status').innerText = "Bấm Mic để trả lời";
             document.getElementById('ready-countdown').style.display = 'none';
 
             currentWord = wordList[Math.floor(Math.random() * wordList.length)];
             const visual = document.getElementById('visual-content');
-            const timerBox = document.getElementById('round-timer-box');
             const hintBox = document.getElementById('round-status-hint');
 
             if (currentMode === 'round1') {
                 document.getElementById('round-title').innerText = "Vòng 1: Nhìn Tranh";
                 visual.innerHTML = `<img src="${currentWord.img}" class="img-display">`;
-                hintBox.innerText = "Con có 5s để bấm Mic!";
+                hintBox.innerText = "Chuẩn bị... 5s để bấm Mic!";
                 startCountdown(5, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 5s! Nhường quyền cho bạn tiếp theo.");
+                    forceSkip("Hết thời gian bấm Mic!");
                 });
             } else if (currentMode === 'round2') {
                 document.getElementById('round-title').innerText = "Vòng 2: Đọc Quiz";
-                visual.innerHTML = `<div style="font-size:18px; line-height:1.5; color:#34495e; padding:10px; font-weight:bold;">${currentWord.d}</div>`;
-                hintBox.innerText = "Đọc kỹ câu hỏi (30s)...";
+                visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%;">${currentWord.d}</div>`;
+                hintBox.innerText = "Con có 30s để đọc câu đố!";
                 startCountdown(30, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 30s! Nhường quyền cho bạn tiếp theo.");
+                    forceSkip("Hết 30s đọc đố!");
                 });
             } else if (currentMode === 'round3') {
                 document.getElementById('round-title').innerText = "Vòng 3: Nghe & Đoán";
-                visual.innerHTML = `<div style="font-size:60px; color:var(--primary);">🔊</div>`;
-                hintBox.innerText = "Hãy nghe giám khảo đọc...";
+                visual.innerHTML = `<div class="big-speaker" onclick="speakJudge()">🔊</div>`;
+                hintBox.innerText = "Đang lắng nghe giám khảo...";
                 window.speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance(`Definition: ${currentWord.d}`);
+                const msg = new SpeechSynthesisUtterance(`Your word is: ${currentWord.d}`);
                 msg.rate = 0.5;
                 msg.onend = () => {
-                    hintBox.innerText = "Con có 10s để bấm Mic!";
+                    hintBox.innerText = "Giám khảo đọc xong! 10s bấm Mic!";
                     startCountdown(10, () => {
                         document.getElementById('mic-container').style.display = 'flex';
                     }, () => {
-                        forceSkip("Hết 10s! Nhường quyền cho bạn tiếp theo.");
+                        forceSkip("Hết 10s suy nghĩ!");
                     });
                 };
                 window.speechSynthesis.speak(msg);
@@ -509,7 +564,6 @@
         }
 
         function requestSpeech() {
-            // Khi bấm Mic, dừng bộ đếm thời gian của vòng
             clearInterval(roundTimer);
             document.getElementById('mic-container').style.display = 'none';
             const countdownEl = document.getElementById('ready-countdown');
@@ -531,25 +585,24 @@
         }
 
         function forceSkip(msg) {
-            document.getElementById('round-feedback').innerText = msg;
+            document.getElementById('round-feedback').innerText = msg + " Nhường quyền trả lời.";
             document.getElementById('round-feedback').style.color = "red";
             document.getElementById('mic-container').style.display = 'none';
             speakText("Time is up!", 0.5);
-            setTimeout(nextQuestion, 3000);
+            setTimeout(nextQuestion, 3500);
         }
 
         function toggleSpeech() {
-            if (!recognition) return alert("Trình duyệt không hỗ trợ Mic.");
+            if (!recognition) return;
             if (isListening) {
                 clearTimeout(silenceTimer);
                 recognition.stop();
             } else {
                 recognition.start();
-                // Nếu trong 3s không nói gì (không vào onresult), báo nhường quyền
                 silenceTimer = setTimeout(() => {
                     if (isListening && fullTranscript === "") {
                         recognition.stop();
-                        forceSkip("Bạn không trả lời kịp. Nhường quyền cho bạn tiếp theo.");
+                        forceSkip("Con chưa nói gì.");
                     }
                 }, 4000);
             }
@@ -563,12 +616,12 @@
             const keywordOccurrences = wordsArray.filter(v => v === word).length;
             
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
-                feedback.innerText = "CHÍNH XÁC! 🌟";
+                feedback.innerText = "CHÍNH XÁC! TUYỆT VỜI 🌟";
                 feedback.style.color = "green";
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2500);
             } else {
-                feedback.innerText = "Con hãy nói lại đúng cấu trúc nhé!";
+                feedback.innerText = "Cố lên, đọc đúng cấu trúc con nhé!";
                 feedback.style.color = "red";
             }
         }
@@ -585,20 +638,24 @@
                 div.innerHTML = `
                     <img src="${item.img}" class="memory-img">
                     <div class="memory-word">${item.w}</div>
+                    <div class="memory-def">${item.d}</div>
                 `;
                 listEl.appendChild(div);
             });
 
             let timeLeft = 60;
             const timerEl = document.getElementById('memory-timer');
-            timerEl.innerText = `Ghi nhớ trong: ${timeLeft}s`;
+            timerEl.innerText = `Ghi nhớ danh sách này: ${timeLeft}s`;
+
+            // Tự động cuộn lên đầu khi bắt đầu vòng 4
+            document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
 
             roundTimer = setInterval(() => {
                 timeLeft--;
-                timerEl.innerText = `Ghi nhớ trong: ${timeLeft}s`;
+                timerEl.innerText = `Ghi nhớ danh sách này: ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
-                    timerEl.innerText = "HẾT GIỜ! HÃY NÓI LẠI CÁC TỪ VỪA NHỚ";
+                    timerEl.innerText = "HẾT GIỜ! CON HÃY NÓI LẠI CÁC TỪ";
                     listEl.style.display = "none";
                     speakText("Time is up. Now say the words you remembered.", 0.5);
                 }
@@ -610,6 +667,11 @@
             utter.lang = 'en-US';
             utter.rate = rate;
             window.speechSynthesis.speak(utter);
+        }
+
+        function speakJudge() {
+            window.speechSynthesis.cancel();
+            speakText(`Your word is: ${currentWord.d}`, 0.5);
         }
 
     </script>
