@@ -45,7 +45,7 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* Nav Tabs siêu gọn */
+        /* Nav Tabs */
         .nav-tabs {
             display: flex;
             background: #f1f1f1;
@@ -119,37 +119,46 @@
         .word-title { font-size: 32px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px; margin: 10px 0; }
         .def-text { font-size: 16px; color: #555; line-height: 1.4; font-style: italic; margin-bottom: 15px; }
 
-        /* Hàng thông tin đồng bộ (Điểm & Thời gian) */
+        /* Fix cứng chiều cao khu vực đếm ngược để không bị nhảy layout */
         .stats-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
             margin-bottom: 8px;
+            height: 45px; /* Chiều cao cố định */
         }
 
         .timer-info { 
             flex: 1;
-            font-size: 14px; 
+            font-size: 16px; 
             font-weight: bold; 
             color: var(--danger); 
             background: #fff5f5;
             padding: 10px;
             border-radius: 10px;
             border: 1px solid #fed7d7;
-            text-align: left; /* Đếm ngược bên trái */
+            text-align: center; 
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .score-display {
             flex: 1;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             color: var(--success);
-            text-align: right; /* Điểm bên phải */
+            text-align: center;
             background: #f0fff4;
             padding: 10px;
             border-radius: 10px;
             border: 1px solid #c6f6d5;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #speak-countdown {
@@ -218,14 +227,6 @@
             letter-spacing: 5px;
             margin-bottom: 5px;
         }
-        .memory-def {
-            font-size: 17px;
-            color: #555;
-            font-style: italic;
-            text-align: center;
-            padding: 0 15px;
-            line-height: 1.4;
-        }
 
         .main-btn { width: 100%; padding: 18px; font-size: 18px; font-weight: bold; border: none; border-radius: 15px; color: white; background: var(--primary); box-shadow: 0 5px #2980b9; }
         .main-btn:active { transform: translateY(3px); box-shadow: 0 2px #2980b9; }
@@ -257,7 +258,10 @@
         <div class="content-area">
             <!-- PHẦN HỌC (Practice) -->
             <div id="section-practice" class="game-area">
-                <div id="practice-timer-text" class="timer-info" style="text-align: center;">Chuyển sau: 60s</div>
+                <div class="stats-row">
+                    <div id="practice-timer-text" class="timer-info">60s</div>
+                    <div class="score-display" style="background: #eef2ff; color: var(--primary); border-color: #c3dafe;">LUYỆN TẬP</div>
+                </div>
                 <div class="img-wrapper">
                     <img id="p-img" src="" class="img-display">
                     <div style="position:absolute; bottom:15px; right:15px; background:var(--primary); color:white; border-radius:50%; width:55px; height:55px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white; z-index: 5;" onclick="replayPractice()">🔊</div>
@@ -270,7 +274,7 @@
             <!-- PHẦN THI (Rounds 1, 2, 3) -->
             <div id="section-play" class="game-area">
                 <div class="stats-row">
-                    <div id="round-timer-box" class="timer-info">Thời gian: 0s</div>
+                    <div id="round-timer-box" class="timer-info">0s</div>
                     <div id="round-score-display" class="score-display">Điểm: 0</div>
                 </div>
                 
@@ -293,7 +297,7 @@
 
             <!-- PHẦN GHI NHỚ (Round 4) -->
             <div id="section-memory" class="game-area">
-                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 50; border-radius: 0 0 15px 15px; text-align: center;">Ghi nhớ trong: 60s</div>
+                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 50; border-radius: 0 0 15px 15px; text-align: center; height: 50px;">60s</div>
                 <div id="memory-list" class="memory-list"></div>
             </div>
         </div>
@@ -309,7 +313,7 @@
             {w: "socks", d: "You wear these on your feet inside shoes.", img: "https://www.crazysocks.com/cdn/shop/products/rainbow-metallic-socks-small_400x.jpg?v=1595977722"},
             {w: "bank", d: "A place where people keep their money safe.", img: "https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-regulatory-office-currency-bank-financial-sector-png-image_368241.jpg"},
             {w: "milk", d: "A white drink that comes from cows.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYbO8jhE0xgrENfXeS6H6K_a08oLL9s5cyeg&s"},
-            {w: "tiger", d: "A big orange wild cat with black stripes.", img: "https://media.istockphoto.com/id/1420676204/photo/portrait-of-a-royal-bengal-tiger-alert-and-staring-at-the-camera-national-animal-of-bangladesh.jpg?s=612x612&w=0&k=20&c=0OCYv99Ktv3fJ-YYlg7SetHBJj3pIk58WY7GDy5VCtI="},
+            {w: "tiger", d: "A large orange wild cat with black stripes.", img: "https://media.istockphoto.com/id/1420676204/photo/portrait-of-a-royal-bengal-tiger-alert-and-staring-at-the-camera-national-animal-of-bangladesh.jpg?s=612x612&w=0&k=20&c=0OCYv99Ktv3fJ-YYlg7SetHBJj3pIk58WY7GDy5VCtI="},
             {w: "zebra", d: "An animal that has black and white stripes.", img: "https://img.freepik.com/free-vector/cute-zebra-cartoon-vector-illustration_1308-180723.jpg?semt=ais_hybrid&w=740&q=80"},
             {w: "field", d: "A big area of land with green grass.", img: "https://media.istockphoto.com/id/1421187500/photo/a-field-of-corn-at-dusk.jpg?s=612x612&w=0&k=20&c=Mv220j7hl1_pX1SvViqk3noNJPF1SkDZQiBDX1gO44w="},
             {w: "juice", d: "A healthy drink made from fruit.", img: "https://media.istockphoto.com/id/158268808/photo/fresh-citrus-juices.jpg?s=612x612&w=0&k=20&c=vflsrO3KXXtWfpOOzNZdBVgeIpLy21-OSUl-QPSgPmU="},
@@ -351,16 +355,16 @@
             {w: "gloves", d: "You wear these on your hands to keep warm.", img: "https://png.pngtree.com/png-clipart/20190517/original/pngtree-cartoon-glove-shape-gloves-cartoon-gloves-glove-pattern-png-image_3822899.jpg"},
             {w: "sweater", d: "Warm clothing you wear on the top of your body.", img: "https://i.pinimg.com/736x/b6/28/09/b62809cf00394ab94fc0db7b729d0e1d.jpg"},
             {w: "sandals", d: "Light shoes you wear when the weather is hot.", img: "https://img.freepik.com/premium-vector/adorable-cartoon-sandals-pink-blue-yellow-illustration_1324823-13193.jpg"},
-            {w: "subway", d: "A train that travels under the ground.", img: "https://t4.ftcdn.com/jpg/03/23/03/35/360_F_323033547_KxnAz5lDWCWqkBicfH7glG9Kinv7WSsh.jpg"},
+            {w: "subway", d: "A train that travels under the ground.", img: "https://t4.ftcdn.net/jpg/03/23/03/35/360_F_323033547_KxnAz5lDWCWqkBicfH7glG9Kinv7WSsh.jpg"},
             {w: "whistle", d: "A small tool that makes a loud, high sound.", img: "https://thumbs.dreamstime.com/b/businessman-coach-blow-whistle-concept-illustration-figure-80735055.jpg"},
-            {w: "tablet", d: "A small computer that you can hold in your hands.", img: "https://t4.ftcdn.com/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
+            {w: "tablet", d: "A small computer that you can hold in your hands.", img: "https://t4.ftcdn.net/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
             {w: "dentist", d: "A doctor who looks after your teeth.", img: "https://media.istockphoto.com/id/914817876/vector/doctor-with-happy-healthy-teeth-vector-illustration.jpg?s=612x612&w=0&k=20&c=7vtPzkyKAPG6ITGT-fchWTe8tn-X2Pi2w70VWlkJKxk="},
             {w: "doctor", d: "A person who helps you when you are sick.", img: "https://www.shutterstock.com/image-vector/male-doctor-smiling-selfconfidence-flat-600nw-2281709217.jpg"},
             {w: "factory", d: "A big building where things are made by machines.", img: "https://img.freepik.com/free-vector/city-drains-flat-background-with-factory-urban-landscape-river-pollution-illustration_1284-62760.jpg?semt=ais_hybrid&w=740&q=80"},
             {w: "traffic", d: "Many cars moving on the road at the same time.", img: "https://img.freepik.com/free-vector/red-traffic-light-flat-illustration_1284-22959.jpg?semt=ais_hybrid&w=740&q=80"},
             {w: "elephant", d: "A very large, gray animal with a long trunk.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfET-rB-9jLqphCYaZ7smAeImBWKTHrqAe8A&s"},
             {w: "flower", d: "The colorful and beautiful part of a plant.", img: "https://png.pngtree.com/png-vector/20250821/ourmid/pngtree-cartoon-bouquet-of-colorful-flowers-clipart-png-image_17261274.png"},
-            {w: "tornado", d: "A very strong and dangerous spinning wind storm.", img: "https://img.freepik.com/free-vector/hand-drawn-tornado-cartoon-illustration_23-2150597821.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "tornado", d: "A strong spinning wind storm.", img: "https://img.freepik.com/free-vector/hand-drawn-tornado-cartoon-illustration_23-2150597821.jpg?semt=ais_hybrid&w=740&q=80"},
             {w: "outback", d: "The wide, dry and wild land in Australia.", img: "https://www.shutterstock.com/image-vector/australian-desert-natural-landscape-beautiful-600nw-2583595329.jpg"},
             {w: "rainbow", d: "A colorful arch in the sky after it rains.", img: "https://i.pinimg.com/564x/48/63/8b/48638bbee73ecccbbd77bb78661b023b.jpg"},
             {w: "popcorn", d: "A snack made from corn that we eat at the cinema.", img: "https://img.freepik.com/premium-vector/cartoon-illustration-popcorn-with-smiling-face-smiling-face_481747-94392.jpg"},
@@ -430,7 +434,7 @@
                 }
                 const displayTranscript = (fullTranscript + interimTranscript).toLowerCase();
                 
-                // Đồng bộ ẩn transcript trong khi nói cho mọi vòng thi 1, 2, 3
+                // Đồng bộ ẩn transcript trong khi nói
                 if (currentMode.startsWith('round')) {
                     document.getElementById('transcript-display').innerText = "...";
                 }
@@ -438,7 +442,7 @@
                 silenceTimer = setTimeout(() => {
                     if (isListening) {
                         recognition.stop();
-                        // Chỉ hiển thị văn bản sau khi dừng hẳn
+                        // Hiển thị nội dung sau khi dừng hẳn
                         document.getElementById('transcript-display').innerText = "Con vừa nói: " + displayTranscript;
                         validateSpeech(displayTranscript);
                     }
@@ -533,13 +537,9 @@
             replayPractice();
 
             let timeLeft = 60;
-            const progress = document.getElementById('practice-progress');
-            if(progress) progress.style.width = '100%';
-
             autoNextInterval = setInterval(() => {
                 timeLeft--;
-                if(progress) progress.style.width = (timeLeft / 60 * 100) + '%';
-                document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
+                document.getElementById('practice-timer-text').innerText = `${timeLeft}s`;
                 if (timeLeft <= 0) manualNextPractice();
             }, 1000);
         }
@@ -561,7 +561,7 @@
             currentMode = 'round' + round;
             document.getElementById('tab-round' + round).classList.add('active');
             
-            // Reset điểm vòng này khi bắt đầu mới
+            // Reset điểm
             currentScores[currentMode] = 0;
             
             if (round === 4) {
@@ -586,20 +586,20 @@
             const hintBox = document.getElementById('round-status-hint');
 
             if (currentMode === 'round1') {
-                hintBox.innerText = "NHÌN TRANH. Con có 5s chuẩn bị bấm Mic!";
+                hintBox.innerText = "NHÌN TRANH. 5s chuẩn bị bấm Mic!";
                 visual.innerHTML = `<img src="${currentWord.img}" class="img-display">`;
                 startCountdown(5, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 5s bấm Mic!");
+                    forceSkip("Hết 5s!");
                 });
             } else if (currentMode === 'round2') {
-                hintBox.innerText = "QUIZ. Con có 30s đọc câu đố bên dưới!";
-                visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">${currentWord.d}</div>`;
+                hintBox.innerText = "QUIZ. 30s đọc đề bên dưới!";
+                visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%;">${currentWord.d}</div>`;
                 startCountdown(30, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 30s đọc đề!");
+                    forceSkip("Hết 30s!");
                 });
             } else if (currentMode === 'round3') {
                 hintBox.innerText = "NGHE. Đang lắng nghe gợi ý...";
@@ -608,11 +608,11 @@
                 const msg = new SpeechSynthesisUtterance(`Definition: ${currentWord.d}`);
                 msg.rate = 0.5;
                 msg.onend = () => {
-                    hintBox.innerText = "Gợi ý xong! 10s để bấm Micro!";
+                    hintBox.innerText = "Xong! 10s bấm Mic!";
                     startCountdown(10, () => {
                         document.getElementById('mic-container').style.display = 'flex';
                     }, () => {
-                        forceSkip("Hết 10s bấm Mic!");
+                        forceSkip("Hết 10s!");
                     });
                 };
                 window.speechSynthesis.speak(msg);
@@ -622,11 +622,11 @@
         function startCountdown(seconds, onStart, onEnd) {
             if (onStart) onStart();
             let timeLeft = seconds;
-            document.getElementById('round-timer-box').innerText = `Thời gian chuẩn bị: ${timeLeft}s`;
+            document.getElementById('round-timer-box').innerText = `${timeLeft}s`;
             
             roundTimer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('round-timer-box').innerText = `Thời gian chuẩn bị: ${timeLeft}s`;
+                document.getElementById('round-timer-box').innerText = `${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
                     if (onEnd) onEnd();
@@ -646,7 +646,7 @@
         }
 
         function forceSkip(msg) {
-            document.getElementById('round-feedback').innerText = msg + " Nhường quyền trả lời.";
+            document.getElementById('round-feedback').innerText = msg + " Nhường quyền.";
             document.getElementById('round-feedback').style.color = "red";
             document.getElementById('mic-container').style.display = 'none';
             speakText("Time is up!", 0.5);
@@ -661,22 +661,18 @@
             const keywordOccurrences = wordsArray.filter(v => v === word).length;
             
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
-                feedback.innerText = "CHÍNH XÁC! TUYỆT VỜI 🌟";
+                feedback.innerText = "CHÍNH XÁC! 🌟";
                 feedback.style.color = "green";
-                
-                // Cộng điểm cho vòng hiện tại
                 currentScores[currentMode]++;
                 updateScoreUI();
-                
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2500);
             } else {
-                feedback.innerText = "Chưa đúng cấu trúc. Con thử lại nhé!";
+                feedback.innerText = "Đọc lại đúng cấu trúc nhé!";
                 feedback.style.color = "red";
             }
         }
 
-        // --- VÒNG 4: GHI NHỚ ---
         function startRound4() {
             const listEl = document.getElementById('memory-list');
             listEl.innerHTML = "";
@@ -689,21 +685,20 @@
                 div.innerHTML = `
                     <img src="${item.img}" class="memory-img">
                     <div class="memory-word">${item.w}</div>
-                    <div class="memory-def">${item.d}</div>
                 `;
                 listEl.appendChild(div);
             });
 
             let timeLeft = 60;
             const timerEl = document.getElementById('memory-timer');
-            timerEl.innerText = `Ghi nhớ danh sách này trong: ${timeLeft}s`;
+            timerEl.innerText = `${timeLeft}s`;
 
             const contentArea = document.querySelector('.content-area');
             if(contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
 
             roundTimer = setInterval(() => {
                 timeLeft--;
-                timerEl.innerText = `Ghi nhớ danh sách này trong: ${timeLeft}s`;
+                timerEl.innerText = `${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
                     timerEl.innerText = "HẾT GIỜ! CON HÃY ĐỌC LẠI CÁC TỪ";
@@ -722,7 +717,7 @@
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            speakText(`Your word is: ${currentWord.d}`, 0.5);
+            speakText(`Definition: ${currentWord.d}`, 0.5);
         }
 
     </script>
