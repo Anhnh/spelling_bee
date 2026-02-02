@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Spelling Bee Master - Luyện Thi Lớp 2</title>
     <style>
         :root {
@@ -15,78 +15,82 @@
             --text-main: #2c3e50;
         }
 
+        * { box-sizing: border-box; }
+
         html, body {
             background-color: var(--bg);
             margin: 0;
             padding: 0;
             color: #333;
             -webkit-overflow-scrolling: touch;
+            width: 100%;
             height: 100%;
+            overflow-x: hidden;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
         }
 
-        /* Container thu gọn để tối ưu diện tích màn hình */
+        /* Container chính tối ưu cho Mobile */
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             background: var(--card-bg);
-            min-height: 100vh;
+            min-height: 100dvh; /* Dynamic viewport height cho iOS */
             display: flex;
             flex-direction: column;
-            text-align: center;
-            box-sizing: border-box;
             position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* Thanh điều hướng dạng Tab siêu gọn */
+        /* Menu Tabs tinh gọn */
         .nav-tabs {
             display: flex;
-            background: #eee;
-            margin: 0;
-            padding: 5px;
-            gap: 5px;
+            background: #f1f1f1;
+            padding: 6px;
+            gap: 6px;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid #ddd;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 10px 5px;
+            padding: 12px 5px;
             font-size: 13px;
             font-weight: bold;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             background: transparent;
-            color: #666;
-            transition: 0.3s;
+            color: #777;
+            transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
         .tab-btn.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
+        /* Khu vực nội dung chính */
         .content-area {
             flex: 1;
-            padding: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        /* Welcome Overlay để kích hoạt âm thanh */
+        /* Welcome Overlay */
         #welcome-overlay {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: var(--bg);
             z-index: 1000;
@@ -94,115 +98,144 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 30px;
+            text-align: center;
         }
 
-        /* Practice Card Styles */
+        /* Practice & Test Section */
+        .game-area {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Khung hiển thị ảnh */
         .img-wrapper {
             position: relative;
             width: 100%;
             background: #fff;
-            border-radius: 15px;
-            border: 1px solid #eee;
-            margin-bottom: 10px;
-            overflow: hidden;
+            border-radius: 18px;
+            border: 2px solid #f9f9f9;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
         }
 
         .img-display {
-            width: 100%;
-            height: auto;
-            max-height: 35vh; /* Tối ưu để không che mất chữ trên iPhone */
+            max-width: 100%;
+            max-height: 35dvh;
+            border-radius: 15px;
             object-fit: contain;
             display: block;
         }
 
         .btn-listen-again {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.9);
+            bottom: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: white;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
-            border: 1px solid #ddd;
+            border: 3px solid white;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
+        /* Typography */
         .word-title {
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 900;
             color: var(--text-main);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin: 5px 0;
+            letter-spacing: 4px;
+            margin: 10px 0;
         }
 
         .def-text {
-            font-size: 16px;
-            color: #666;
+            font-size: 17px;
+            color: #555;
+            line-height: 1.5;
             font-style: italic;
-            margin-bottom: 15px;
-            min-height: 44px;
+            margin-bottom: 20px;
             padding: 0 10px;
         }
 
-        /* Timer & Controls */
-        .timer-line { width: 100%; height: 6px; background: #eee; border-radius: 3px; margin-bottom: 15px; overflow: hidden; }
+        /* Progress Bar */
+        .timer-line { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
         .timer-fill { height: 100%; background: var(--secondary); width: 100%; transition: width 1s linear; }
 
-        .control-btns { display: flex; gap: 10px; justify-content: center; margin-top: auto; padding-bottom: 20px; }
+        /* Buttons */
+        .control-btns { margin-top: auto; padding: 10px 0 20px 0; }
         
         .main-btn {
-            padding: 15px 30px;
-            font-size: 16px;
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
             color: white;
             background: var(--primary);
-            box-shadow: 0 4px #2980b9;
+            box-shadow: 0 5px #2980b9;
+            transition: all 0.1s;
         }
-        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px #2980b9; }
+        .main-btn:active { transform: translateY(3px); box-shadow: 0 2px #2980b9; }
 
-        /* Testing Mode Styles */
-        .mic-btn {
-            width: 80px; height: 80px; border-radius: 50%; border: none;
-            background: var(--danger); color: white; font-size: 30px;
-            box-shadow: 0 5px #c0392b; margin: 15px 0;
+        /* Mic Section */
+        .mic-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .mic-btn.listening { background: var(--success); box-shadow: 0 0 20px var(--success); animation: pulse 1.5s infinite; }
+
+        .mic-btn {
+            width: 90px; height: 90px; border-radius: 50%; border: none;
+            background: var(--danger); color: white; font-size: 36px;
+            box-shadow: 0 6px #c0392b; margin-bottom: 12px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .mic-btn.listening { background: var(--success); box-shadow: 0 0 30px var(--success); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .transcript-box {
-            background: #f8f9fa; padding: 12px; border-radius: 10px;
-            border: 2px dashed #ddd; font-size: 16px; font-weight: bold;
-            min-height: 40px; margin: 10px 0;
+            background: #f1f4f9; padding: 15px; border-radius: 12px;
+            border: 2px dashed #3498db; font-size: 16px; font-weight: bold;
+            min-height: 50px; margin: 10px 0; width: 100%; color: #34495e;
         }
 
-        .feedback-msg { font-size: 18px; font-weight: bold; height: 24px; margin: 10px 0; }
+        .feedback-msg { font-size: 20px; font-weight: bold; height: 28px; margin: 10px 0; }
 
-        @media (max-width: 480px) {
+        .audio-trigger { font-size: 100px; color: var(--primary); cursor: pointer; margin: 20px 0; }
+
+        @media (max-width: 380px) {
             .word-title { font-size: 28px; }
-            .container { padding: 0; }
-            .content-area { padding: 10px; }
+            .img-wrapper { min-height: 200px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Welcome Screen -->
+        <!-- Màn hình chào để kích hoạt Audio -->
         <div id="welcome-overlay">
-            <div style="font-size: 80px; margin-bottom: 20px;">🐝</div>
-            <h2 style="color: #d35400;">Spelling Bee Master</h2>
-            <p style="color: #7f8c8d; text-align: center;">Chào con gái! Bấm nút bên dưới để bắt đầu luyện thi nhé.</p>
-            <button class="main-btn" style="background: var(--success); box-shadow: 0 4px #27ae60;" onclick="startApp()">BẮT ĐẦU HỌC</button>
+            <div style="font-size: 100px; margin-bottom: 20px;">🐝</div>
+            <h1 style="color: #d35400; margin: 0;">Spelling Bee</h1>
+            <p style="color: #7f8c8d; margin-bottom: 30px;">Chào mừng con gái yêu!<br>Sẵn sàng để trở thành quán quân nào.</p>
+            <button class="main-btn" style="background: var(--success); box-shadow: 0 5px #27ae60;" onclick="startApp()">BẮT ĐẦU NGAY</button>
         </div>
 
         <!-- Navigation Tabs -->
@@ -213,41 +246,41 @@
         </div>
 
         <div class="content-area">
-            <!-- Practice Section -->
-            <div id="section-practice" class="game-area" style="display: none;">
+            <!-- Khu vực Luyện tập -->
+            <div id="section-practice" class="game-area">
                 <div class="timer-line"><div id="practice-progress" class="timer-fill"></div></div>
-                <div id="practice-timer-text" style="font-size: 12px; color: #999; margin-bottom: 10px;">Chuyển sau: 60s</div>
+                <div id="practice-timer-text" style="font-size: 12px; color: #aaa; margin-bottom: 12px; font-weight: bold;">Tự động chuyển sau: 60s</div>
                 
                 <div class="img-wrapper">
-                    <img id="p-img" src="" class="img-display" onerror="this.src='https://placehold.co/500x350?text=Image+Loading...'">
+                    <img id="p-img" src="" class="img-display" onerror="this.src='https://placehold.co/500x350?text=Đang+tải+ảnh...'">
                     <div class="btn-listen-again" onclick="replayPractice()">🔊</div>
                 </div>
                 
-                <div id="p-word" class="word-title">WORD</div>
-                <div id="p-def" class="def-text">Definition goes here...</div>
+                <div id="p-word" class="word-title">---</div>
+                <div id="p-def" class="def-text">---</div>
                 
                 <div class="control-btns">
                     <button class="main-btn" onclick="manualNextPractice()">TỪ TIẾP THEO ➔</button>
                 </div>
             </div>
 
-            <!-- Testing Section -->
-            <div id="section-play" class="game-area" style="display: none;">
-                <h3 id="round-title" style="margin: 5px 0; color: var(--primary); font-size: 16px;"></h3>
+            <!-- Khu vực Thi đấu (Vòng 1 & 2) -->
+            <div id="section-play" class="game-area">
+                <h3 id="round-title" style="margin: 0 0 15px 0; color: var(--text-main); font-size: 18px;"></h3>
                 
-                <div id="visual-content" style="margin-top: 10px;"></div>
+                <div id="visual-content" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;"></div>
                 
                 <div class="mic-section">
-                    <p style="font-size: 13px; color: #888; margin: 10px 0;">Hãy nói: <b>[Từ] - [Đánh vần] - [Từ]</b></p>
+                    <p style="font-size: 13px; color: #888; margin-bottom: 10px;">Cấu trúc: <b>Từ - Đánh vần - Từ</b></p>
                     <button id="mic-btn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
-                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #999;">Bấm Mic để trả lời</div>
+                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #aaa;">Bấm Micro để nói</div>
                 </div>
 
-                <div class="transcript-box" id="transcript-display">Con hãy nói...</div>
+                <div class="transcript-box" id="transcript-display">...</div>
                 <div id="round-feedback" class="feedback-msg"></div>
                 
                 <div class="control-btns">
-                    <button class="main-btn" style="background: #bdc3c7; box-shadow: 0 4px #95a5a6; padding: 10px 20px;" onclick="nextQuestion()">BỎ QUA</button>
+                    <button class="main-btn" style="background: #bdc3c7; box-shadow: 0 5px #95a5a6; padding: 12px;" onclick="nextQuestion()">BỎ QUA</button>
                 </div>
             </div>
         </div>
@@ -341,12 +374,13 @@
         let currentWord = {};
         let practiceList = []; 
         let practiceIdx = 0;
-        let practiceTimer, autoNextInterval;
+        let autoNextInterval;
         let isListening = false;
         let recognition;
         let silenceTimer; 
         let fullTranscript = ""; 
 
+        // Khởi tạo Speech Recognition
         if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
             const SpeechRecognition = window.webkitSpeechRecognition || window.speechRecognition;
             recognition = new SpeechRecognition();
@@ -358,7 +392,7 @@
                 isListening = true;
                 fullTranscript = "";
                 document.getElementById('mic-btn').classList.add('listening');
-                document.getElementById('mic-status').innerText = "Đang nghe...";
+                document.getElementById('mic-status').innerText = "Máy đang nghe...";
             };
 
             recognition.onresult = (event) => {
@@ -385,18 +419,23 @@
             recognition.onend = () => {
                 isListening = false;
                 document.getElementById('mic-btn').classList.remove('listening');
-                document.getElementById('mic-status').innerText = "Bấm để nói lại";
+                document.getElementById('mic-status').innerText = "Bấm Mic để nói lại";
             };
+        }
+
+        function startApp() {
+            document.getElementById('welcome-overlay').style.display = 'none';
+            document.getElementById('main-nav').style.display = 'flex';
+            initPractice();
         }
 
         function hideAll() {
             document.querySelectorAll('.game-area').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            clearInterval(practiceTimer);
             clearInterval(autoNextInterval);
             clearTimeout(silenceTimer);
             window.speechSynthesis.cancel();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (recognition && isListening) recognition.stop();
         }
 
         function shuffleArray(array) {
@@ -408,12 +447,7 @@
             return shuffled;
         }
 
-        function startApp() {
-            document.getElementById('welcome-overlay').style.display = 'none';
-            document.getElementById('main-nav').style.display = 'flex';
-            initPractice();
-        }
-
+        // --- TRANG LUYỆN TẬP ---
         function initPractice() {
             hideAll();
             currentMode = 'practice';
@@ -425,15 +459,12 @@
         }
 
         function renderPractice() {
-            clearInterval(practiceTimer);
             clearInterval(autoNextInterval);
-            
             const item = practiceList[practiceIdx];
             document.getElementById('p-img').src = item.img;
             document.getElementById('p-word').innerText = item.w;
             document.getElementById('p-def').innerText = item.d;
 
-            // Đọc từ đầu tiên
             replayPractice();
 
             let timeLeft = 60;
@@ -443,7 +474,7 @@
             autoNextInterval = setInterval(() => {
                 timeLeft--;
                 progress.style.width = (timeLeft / 60 * 100) + '%';
-                document.getElementById('practice-timer-info').innerText = `Chuyển sau: ${timeLeft}s`;
+                document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
                 if (timeLeft <= 0) manualNextPractice();
             }, 1000);
         }
@@ -459,6 +490,7 @@
             renderPractice();
         }
 
+        // --- CÁC VÒNG THI ---
         function initRound(round) {
             hideAll();
             currentMode = 'round' + round;
@@ -476,13 +508,16 @@
             const visual = document.getElementById('visual-content');
 
             if (currentMode === 'round1') {
-                title.innerText = "Vòng 1: Nhìn Tranh Đoán Từ";
-                visual.innerHTML = `<img src="${currentWord.img}" class="img-display" style="max-height:30vh;">`;
+                title.innerText = "Vòng 1: Nhìn Tranh";
+                visual.innerHTML = `
+                    <div class="img-wrapper" style="border:none; box-shadow:none; background:transparent;">
+                        <img src="${currentWord.img}" class="img-display" style="max-height:30dvh;">
+                    </div>`;
             } else {
                 title.innerText = "Vòng 2: Nghe Định Nghĩa";
                 visual.innerHTML = `
                     <div class="audio-trigger" onclick="speakJudge()">🔊</div>
-                    <p style="font-weight:bold; font-size:14px;">Bấm loa để nghe</p>
+                    <p style="font-weight:bold; font-size:14px; color:#666;">Bấm loa để nghe</p>
                 `;
                 speakJudge();
             }
@@ -516,7 +551,7 @@
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2000);
             } else {
-                feedback.innerText = "Nói lại: Từ - Đánh vần - Từ";
+                feedback.innerText = "Hãy nói đúng cấu trúc nhé!";
                 feedback.style.color = "red";
             }
         }
@@ -527,7 +562,6 @@
             utter.rate = rate;
             window.speechSynthesis.speak(utter);
         }
-
     </script>
 </body>
 </html>
