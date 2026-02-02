@@ -42,6 +42,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
         /* Nav Tabs siêu gọn */
@@ -98,7 +99,7 @@
 
         .game-area { display: none; flex-direction: column; height: 100%; }
 
-        /* Styles chung cho ảnh và nội dung */
+        /* Styles ảnh và nội dung */
         .img-wrapper {
             width: 100%;
             background: #fff;
@@ -107,9 +108,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 200px;
+            min-height: 220px;
             position: relative;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 10px;
         }
 
         .img-display { max-width: 100%; max-height: 35dvh; object-fit: contain; border-radius: 12px; }
@@ -117,7 +119,7 @@
         .word-title { font-size: 32px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px; margin: 10px 0; }
         .def-text { font-size: 16px; color: #555; line-height: 1.4; font-style: italic; margin-bottom: 15px; }
 
-        /* Hệ thống Countdown */
+        /* Countdown chu kỳ nói */
         .timer-info { 
             font-size: 16px; 
             font-weight: bold; 
@@ -127,13 +129,14 @@
             padding: 8px;
             border-radius: 8px;
             border: 1px solid #fed7d7;
+            text-align: center;
         }
 
         #ready-countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 100px; font-weight: bold; color: var(--secondary);
-            text-shadow: 0 0 30px rgba(255,255,255,1), 0 0 10px rgba(0,0,0,0.2);
-            z-index: 100; display: none;
+            font-size: 110px; font-weight: bold; color: var(--secondary);
+            text-shadow: 0 0 30px rgba(255,255,255,1), 0 0 15px rgba(0,0,0,0.2);
+            z-index: 110; display: none;
             pointer-events: none;
         }
 
@@ -156,13 +159,13 @@
             text-align: center;
         }
 
-        .feedback-msg { font-size: 20px; font-weight: bold; min-height: 28px; margin: 10px 0; }
+        .feedback-msg { font-size: 19px; font-weight: bold; min-height: 28px; margin: 10px 0; text-align: center; }
 
         /* Vòng 4 Ghi nhớ - Ảnh to gần full màn hình */
         .memory-list { 
             display: flex; 
             flex-direction: column; 
-            gap: 30px; 
+            gap: 40px; 
             padding-bottom: 50px;
         }
         .memory-item { 
@@ -170,42 +173,41 @@
             flex-direction: column; 
             align-items: center; 
             background: #fff; 
-            padding: 15px; 
+            padding: 10px; 
             border-radius: 20px; 
-            border: 2px solid #f0f0f0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid #f5f5f5;
         }
         .memory-img { 
-            width: 100%; 
+            width: 95%; 
             height: auto; 
-            max-height: 45dvh; 
+            max-height: 50dvh; 
             object-fit: contain; 
             border-radius: 15px; 
             margin-bottom: 15px;
             background: #fafafa;
         }
         .memory-word { 
-            font-size: 32px; 
+            font-size: 36px; 
             font-weight: 900; 
             text-transform: uppercase; 
             color: var(--primary); 
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             margin-bottom: 5px;
         }
         .memory-def {
-            font-size: 16px;
-            color: #666;
+            font-size: 17px;
+            color: #555;
             font-style: italic;
             text-align: center;
-            padding: 0 10px;
+            padding: 0 15px;
+            line-height: 1.4;
         }
 
         .main-btn { width: 100%; padding: 18px; font-size: 18px; font-weight: bold; border: none; border-radius: 15px; color: white; background: var(--primary); box-shadow: 0 5px #2980b9; }
         .main-btn:active { transform: translateY(3px); box-shadow: 0 2px #2980b9; }
 
-        /* Loa to ở Vòng 3 */
-        .big-speaker { font-size: 100px; color: var(--primary); cursor: pointer; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .big-speaker { font-size: 110px; color: var(--primary); cursor: pointer; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
     </style>
 </head>
 <body>
@@ -213,13 +215,13 @@
     <div class="container">
         <!-- Màn hình chào -->
         <div id="welcome-overlay">
-            <div style="font-size: 80px;">🐝</div>
-            <h1 style="color: #d35400;">Spelling Bee</h1>
-            <p>Chào con gái yêu! Sẵn sàng luyện thi chưa nào?</p>
-            <button class="main-btn" style="background: var(--success); box-shadow: 0 5px #27ae60;" onclick="startApp()">BẮT ĐẦU HỌC</button>
+            <div style="font-size: 90px;">🐝</div>
+            <h1 style="color: #d35400; margin-bottom: 10px;">Spelling Bee</h1>
+            <p style="color: #666;">Dành cho con gái yêu lớp 2</p>
+            <button class="main-btn" style="background: var(--success); box-shadow: 0 5px #27ae60; margin-top: 20px;" onclick="startApp()">BẮT ĐẦU NGAY</button>
         </div>
 
-        <!-- Thanh Tab gọn nhẹ -->
+        <!-- Thanh Tab -->
         <div class="nav-tabs" id="main-nav" style="display: none;">
             <button id="tab-practice" class="tab-btn active" onclick="initPractice()">HỌC</button>
             <button id="tab-round1" class="tab-btn" onclick="initRound(1)">VÒNG 1</button>
@@ -234,7 +236,7 @@
                 <div id="practice-timer-text" class="timer-info">Chuyển sau: 60s</div>
                 <div class="img-wrapper">
                     <img id="p-img" src="" class="img-display">
-                    <div style="position:absolute; bottom:15px; right:15px; background:var(--primary); color:white; border-radius:50%; width:50px; height:50px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white;" onclick="replayPractice()">🔊</div>
+                    <div style="position:absolute; bottom:15px; right:15px; background:var(--primary); color:white; border-radius:50%; width:55px; height:55px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white; z-index: 5;" onclick="replayPractice()">🔊</div>
                 </div>
                 <div id="p-word" class="word-title">---</div>
                 <div id="p-def" class="def-text">---</div>
@@ -244,7 +246,7 @@
             <!-- PHẦN THI (Rounds 1, 2, 3) -->
             <div id="section-play" class="game-area">
                 <div id="round-timer-box" class="timer-info">...</div>
-                <div id="round-status-hint" style="font-size: 14px; color: #555; font-weight: bold; margin-bottom: 10px; background: #eef2ff; padding: 5px; border-radius: 5px;"></div>
+                <div id="round-status-hint" style="font-size: 14px; color: #444; font-weight: bold; margin-bottom: 10px; background: #ebf4ff; padding: 10px; border-radius: 8px; text-align: center;"></div>
                 
                 <div class="img-wrapper">
                     <div id="ready-countdown">3</div>
@@ -253,7 +255,7 @@
 
                 <div class="mic-section" id="mic-container" style="display: none;">
                     <button id="mic-btn" class="mic-btn" onclick="requestSpeech()">🎤</button>
-                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #777; margin-top: 8px;">Bấm để trả lời</div>
+                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #888; margin-top: 10px;">Bấm Micro để trả lời</div>
                 </div>
 
                 <div class="transcript-box" id="transcript-display">...</div>
@@ -263,7 +265,7 @@
 
             <!-- PHẦN GHI NHỚ (Round 4) -->
             <div id="section-memory" class="game-area">
-                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 10; border-radius: 0 0 15px 15px;">Ghi nhớ trong: 60s</div>
+                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 50; border-radius: 0 0 15px 15px;">Ghi nhớ trong: 60s</div>
                 <div id="memory-list" class="memory-list"></div>
             </div>
         </div>
@@ -377,8 +379,7 @@
                 isListening = true;
                 fullTranscript = "";
                 document.getElementById('mic-btn').classList.add('listening');
-                document.getElementById('mic-status').innerText = "Đang nghe...";
-                document.getElementById('transcript-display').innerText = "Máy đang lắng nghe con...";
+                document.getElementById('mic-status').innerText = "Đang lắng nghe con...";
             };
 
             recognition.onresult = (event) => {
@@ -393,7 +394,7 @@
                 }
                 const displayTranscript = (fullTranscript + interimTranscript).toLowerCase();
                 
-                // Ở Vòng 1, ẩn transcript khi đang nói
+                // Ở Vòng 1: Không hiện transcript khi đang nói
                 if (currentMode !== 'round1') {
                     document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
                 }
@@ -401,7 +402,6 @@
                 silenceTimer = setTimeout(() => {
                     if (isListening) {
                         recognition.stop();
-                        // Sau khi dừng mới hiện văn bản cho Vòng 1
                         document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
                         validateSpeech(displayTranscript);
                     }
@@ -442,7 +442,7 @@
             return shuffled;
         }
 
-        // --- LUYỆN TẬP ---
+        // --- TRANG HỌC ---
         function initPractice() {
             hideAll();
             currentMode = 'practice';
@@ -464,11 +464,11 @@
 
             let timeLeft = 60;
             const progress = document.getElementById('practice-progress');
-            progress.style.width = '100%';
+            if(progress) progress.style.width = '100%';
 
             autoNextInterval = setInterval(() => {
                 timeLeft--;
-                progress.style.width = (timeLeft / 60 * 100) + '%';
+                if(progress) progress.style.width = (timeLeft / 60 * 100) + '%';
                 document.getElementById('practice-timer-text').innerText = `Tự động chuyển sau: ${timeLeft}s`;
                 if (timeLeft <= 0) manualNextPractice();
             }, 1000);
@@ -485,7 +485,7 @@
             renderPractice();
         }
 
-        // --- CÁC VÒNG THI ---
+        // --- TRANG THI ---
         function initRound(round) {
             hideAll();
             currentMode = 'round' + round;
@@ -512,36 +512,33 @@
             const hintBox = document.getElementById('round-status-hint');
 
             if (currentMode === 'round1') {
-                document.getElementById('round-title').innerText = "Vòng 1: Nhìn Tranh";
+                hintBox.innerText = "Vòng 1: Nhìn Tranh. Con có 5s để bấm Mic!";
                 visual.innerHTML = `<img src="${currentWord.img}" class="img-display">`;
-                hintBox.innerText = "Chuẩn bị... 5s để bấm Mic!";
                 startCountdown(5, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết thời gian bấm Mic!");
+                    forceSkip("Hết 5s bấm Mic!");
                 });
             } else if (currentMode === 'round2') {
-                document.getElementById('round-title').innerText = "Vòng 2: Đọc Quiz";
+                hintBox.innerText = "Vòng 2: Quiz. Con có 30s để đọc đố!";
                 visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%;">${currentWord.d}</div>`;
-                hintBox.innerText = "Con có 30s để đọc câu đố!";
                 startCountdown(30, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 30s đọc đố!");
+                    forceSkip("Hết 30s chuẩn bị!");
                 });
             } else if (currentMode === 'round3') {
-                document.getElementById('round-title').innerText = "Vòng 3: Nghe & Đoán";
+                hintBox.innerText = "Vòng 3: Nghe & Đoán. Đang nghe giám khảo...";
                 visual.innerHTML = `<div class="big-speaker" onclick="speakJudge()">🔊</div>`;
-                hintBox.innerText = "Đang lắng nghe giám khảo...";
                 window.speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance(`Your word is: ${currentWord.d}`);
+                const msg = new SpeechSynthesisUtterance(`Definition: ${currentWord.d}`);
                 msg.rate = 0.5;
                 msg.onend = () => {
                     hintBox.innerText = "Giám khảo đọc xong! 10s bấm Mic!";
                     startCountdown(10, () => {
                         document.getElementById('mic-container').style.display = 'flex';
                     }, () => {
-                        forceSkip("Hết 10s suy nghĩ!");
+                        forceSkip("Hết 10s bấm Mic!");
                     });
                 };
                 window.speechSynthesis.speak(msg);
@@ -602,9 +599,9 @@
                 silenceTimer = setTimeout(() => {
                     if (isListening && fullTranscript === "") {
                         recognition.stop();
-                        forceSkip("Con chưa nói gì.");
+                        forceSkip("Bạn không trả lời kịp.");
                     }
-                }, 4000);
+                }, 4500); 
             }
         }
 
@@ -616,12 +613,12 @@
             const keywordOccurrences = wordsArray.filter(v => v === word).length;
             
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
-                feedback.innerText = "CHÍNH XÁC! TUYỆT VỜI 🌟";
+                feedback.innerText = "CHÍNH XÁC! 🌟";
                 feedback.style.color = "green";
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2500);
             } else {
-                feedback.innerText = "Cố lên, đọc đúng cấu trúc con nhé!";
+                feedback.innerText = "Cố lên! Nói đúng cấu trúc con nhé!";
                 feedback.style.color = "red";
             }
         }
@@ -630,6 +627,7 @@
         function startRound4() {
             const listEl = document.getElementById('memory-list');
             listEl.innerHTML = "";
+            listEl.style.display = "flex";
             const sample = shuffleArray(wordList).slice(0, 10);
             
             sample.forEach(item => {
@@ -645,19 +643,19 @@
 
             let timeLeft = 60;
             const timerEl = document.getElementById('memory-timer');
-            timerEl.innerText = `Ghi nhớ danh sách này: ${timeLeft}s`;
+            timerEl.innerText = `Ghi nhớ các từ sau: ${timeLeft}s`;
 
-            // Tự động cuộn lên đầu khi bắt đầu vòng 4
-            document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
+            const contentArea = document.querySelector('.content-area');
+            if(contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
 
             roundTimer = setInterval(() => {
                 timeLeft--;
-                timerEl.innerText = `Ghi nhớ danh sách này: ${timeLeft}s`;
+                timerEl.innerText = `Ghi nhớ các từ sau: ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
                     timerEl.innerText = "HẾT GIỜ! CON HÃY NÓI LẠI CÁC TỪ";
                     listEl.style.display = "none";
-                    speakText("Time is up. Now say the words you remembered.", 0.5);
+                    speakText("Time is up. Tell me the words you remembered.", 0.5);
                 }
             }, 1000);
         }
@@ -671,7 +669,7 @@
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            speakText(`Your word is: ${currentWord.d}`, 0.5);
+            speakText(`Definition: ${currentWord.d}`, 0.5);
         }
 
     </script>
