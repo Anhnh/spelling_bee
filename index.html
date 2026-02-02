@@ -45,7 +45,6 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* Nav Tabs siêu gọn */
         .nav-tabs {
             display: flex;
             background: #f1f1f1;
@@ -99,7 +98,6 @@
 
         .game-area { display: none; flex-direction: column; height: 100%; }
 
-        /* Styles ảnh và nội dung */
         .img-wrapper {
             width: 100%;
             background: #fff;
@@ -119,12 +117,11 @@
         .word-title { font-size: 32px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px; margin: 10px 0; }
         .def-text { font-size: 16px; color: #555; line-height: 1.4; font-style: italic; margin-bottom: 15px; }
 
-        /* Countdown chu kỳ nói */
         .timer-info { 
             font-size: 16px; 
             font-weight: bold; 
             color: var(--danger); 
-            margin-bottom: 10px; 
+            margin-bottom: 5px; 
             background: #fff5f5;
             padding: 8px;
             border-radius: 8px;
@@ -132,15 +129,30 @@
             text-align: center;
         }
 
-        #ready-countdown {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 110px; font-weight: bold; color: var(--secondary);
-            text-shadow: 0 0 30px rgba(255,255,255,1), 0 0 15px rgba(0,0,0,0.2);
-            z-index: 110; display: none;
-            pointer-events: none;
+        /* Bảng điểm */
+        .score-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--success);
+            margin-bottom: 10px;
+            text-align: center;
+            background: #f0fff4;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid #c6f6d5;
         }
 
-        /* Mic & Feedback */
+        #speak-countdown {
+            color: var(--secondary);
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+            display: none;
+            background: #fff9db;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
         .mic-section { display: flex; flex-direction: column; align-items: center; margin: 10px 0; }
         .mic-btn {
             width: 85px; height: 85px; border-radius: 50%; border: none;
@@ -161,7 +173,6 @@
 
         .feedback-msg { font-size: 19px; font-weight: bold; min-height: 28px; margin: 10px 0; text-align: center; }
 
-        /* Vòng 4 Ghi nhớ - Ảnh to gần full màn hình */
         .memory-list { 
             display: flex; 
             flex-direction: column; 
@@ -176,6 +187,7 @@
             padding: 10px; 
             border-radius: 20px; 
             border: 2px solid #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .memory-img { 
             width: 95%; 
@@ -245,17 +257,18 @@
 
             <!-- PHẦN THI (Rounds 1, 2, 3) -->
             <div id="section-play" class="game-area">
+                <div id="round-score-display" class="score-display">Điểm của con: 0</div>
                 <div id="round-timer-box" class="timer-info">...</div>
                 <div id="round-status-hint" style="font-size: 14px; color: #444; font-weight: bold; margin-bottom: 10px; background: #ebf4ff; padding: 10px; border-radius: 8px; text-align: center;"></div>
                 
                 <div class="img-wrapper">
-                    <div id="ready-countdown">3</div>
                     <div id="visual-content" style="width:100%; display:flex; justify-content:center; align-items:center;"></div>
                 </div>
 
                 <div class="mic-section" id="mic-container" style="display: none;">
-                    <button id="mic-btn" class="mic-btn" onclick="requestSpeech()">🎤</button>
+                    <button id="mic-btn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
                     <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #888; margin-top: 10px;">Bấm Micro để trả lời</div>
+                    <div id="speak-countdown">NÓI TRONG: 3s</div>
                 </div>
 
                 <div class="transcript-box" id="transcript-display">...</div>
@@ -363,11 +376,12 @@
         let isListening = false;
         let recognition;
         let silenceTimer; 
+        let speakingWindowTimer; 
         let fullTranscript = "";
         let roundTimer; 
-        let readyCountdownInterval;
+        let currentScores = { round1: 0, round2: 0, round3: 0 };
 
-        // Cấu hình Speech Recognition
+        // Khởi tạo Speech Recognition
         if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
             const SpeechRecognition = window.webkitSpeechRecognition || window.speechRecognition;
             recognition = new SpeechRecognition();
@@ -379,11 +393,18 @@
                 isListening = true;
                 fullTranscript = "";
                 document.getElementById('mic-btn').classList.add('listening');
-                document.getElementById('mic-status').innerText = "Đang lắng nghe con...";
+                document.getElementById('mic-status').innerText = "Máy đang lắng nghe...";
+                document.getElementById('transcript-display').innerText = "...";
+                
+                // Bộ đếm 3s để bắt đầu phát âm
+                startSpeakingCountdown(3);
             };
 
             recognition.onresult = (event) => {
+                // Hủy bộ đếm nhường quyền ngay khi có dữ liệu nói
+                stopSpeakingCountdown();
                 clearTimeout(silenceTimer);
+
                 let interimTranscript = "";
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
@@ -394,15 +415,16 @@
                 }
                 const displayTranscript = (fullTranscript + interimTranscript).toLowerCase();
                 
-                // Ở Vòng 1: Không hiện transcript khi đang nói
-                if (currentMode !== 'round1') {
-                    document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
+                // Đồng bộ ẩn transcript trong khi nói cho mọi vòng thi 1, 2, 3
+                if (currentMode.startsWith('round')) {
+                    document.getElementById('transcript-display').innerText = "...";
                 }
                 
                 silenceTimer = setTimeout(() => {
                     if (isListening) {
                         recognition.stop();
-                        document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
+                        // Chỉ hiển thị văn bản sau khi dừng hẳn
+                        document.getElementById('transcript-display').innerText = "Con vừa nói: " + displayTranscript;
                         validateSpeech(displayTranscript);
                     }
                 }, 3500); 
@@ -411,8 +433,34 @@
             recognition.onend = () => {
                 isListening = false;
                 document.getElementById('mic-btn').classList.remove('listening');
-                document.getElementById('mic-status').innerText = "Bấm Mic để nói lại";
+                document.getElementById('mic-status').innerText = "Bấm Mic để trả lời";
+                stopSpeakingCountdown();
             };
+        }
+
+        function startSpeakingCountdown(seconds) {
+            const el = document.getElementById('speak-countdown');
+            el.style.display = 'block';
+            let timeLeft = seconds;
+            el.innerText = `HÃY NÓI TRONG: ${timeLeft}s`;
+
+            speakingWindowTimer = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    el.innerText = `HÃY NÓI TRONG: ${timeLeft}s`;
+                } else {
+                    clearInterval(speakingWindowTimer);
+                    if (isListening && fullTranscript === "") {
+                        recognition.stop();
+                        forceSkip("Con không bắt đầu kịp.");
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopSpeakingCountdown() {
+            clearInterval(speakingWindowTimer);
+            document.getElementById('speak-countdown').style.display = 'none';
         }
 
         function startApp() {
@@ -426,11 +474,10 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             clearInterval(autoNextInterval);
             clearInterval(roundTimer);
-            clearInterval(readyCountdownInterval);
+            stopSpeakingCountdown();
             clearTimeout(silenceTimer);
             window.speechSynthesis.cancel();
             if (recognition && isListening) recognition.stop();
-            document.getElementById('ready-countdown').style.display = 'none';
         }
 
         function shuffleArray(array) {
@@ -442,7 +489,15 @@
             return shuffled;
         }
 
-        // --- TRANG HỌC ---
+        function updateScoreUI() {
+            const scoreEl = document.getElementById('round-score-display');
+            if (scoreEl) {
+                const modeKey = currentMode;
+                scoreEl.innerText = `Điểm của con: ${currentScores[modeKey] || 0}`;
+            }
+        }
+
+        // --- PHẦN HỌC ---
         function initPractice() {
             hideAll();
             currentMode = 'practice';
@@ -485,17 +540,21 @@
             renderPractice();
         }
 
-        // --- TRANG THI ---
+        // --- PHẦN THI ---
         function initRound(round) {
             hideAll();
             currentMode = 'round' + round;
             document.getElementById('tab-round' + round).classList.add('active');
+            
+            // Reset điểm vòng này khi bắt đầu mới
+            currentScores[currentMode] = 0;
             
             if (round === 4) {
                 document.getElementById('section-memory').style.display = 'flex';
                 startRound4();
             } else {
                 document.getElementById('section-play').style.display = 'flex';
+                updateScoreUI();
                 nextQuestion();
             }
         }
@@ -505,14 +564,14 @@
             document.getElementById('round-feedback').innerText = "";
             document.getElementById('transcript-display').innerText = "...";
             document.getElementById('mic-container').style.display = 'none';
-            document.getElementById('ready-countdown').style.display = 'none';
+            stopSpeakingCountdown();
 
             currentWord = wordList[Math.floor(Math.random() * wordList.length)];
             const visual = document.getElementById('visual-content');
             const hintBox = document.getElementById('round-status-hint');
 
             if (currentMode === 'round1') {
-                hintBox.innerText = "Vòng 1: Nhìn Tranh. Con có 5s để bấm Mic!";
+                hintBox.innerText = "NHÌN TRANH. Con có 5s chuẩn bị bấm Mic!";
                 visual.innerHTML = `<img src="${currentWord.img}" class="img-display">`;
                 startCountdown(5, () => {
                     document.getElementById('mic-container').style.display = 'flex';
@@ -520,21 +579,21 @@
                     forceSkip("Hết 5s bấm Mic!");
                 });
             } else if (currentMode === 'round2') {
-                hintBox.innerText = "Vòng 2: Quiz. Con có 30s để đọc đố!";
-                visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%;">${currentWord.d}</div>`;
+                hintBox.innerText = "QUIZ. Con có 30s đọc câu đố bên dưới!";
+                visual.innerHTML = `<div style="font-size:22px; line-height:1.6; color:var(--text-main); padding:20px; font-weight:bold; background:#fff9e6; border-radius:15px; border:2px solid #ffeeba; text-align:center; width:100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">${currentWord.d}</div>`;
                 startCountdown(30, () => {
                     document.getElementById('mic-container').style.display = 'flex';
                 }, () => {
-                    forceSkip("Hết 30s chuẩn bị!");
+                    forceSkip("Hết 30s đọc đề!");
                 });
             } else if (currentMode === 'round3') {
-                hintBox.innerText = "Vòng 3: Nghe & Đoán. Đang nghe giám khảo...";
+                hintBox.innerText = "NGHE. Đang lắng nghe gợi ý...";
                 visual.innerHTML = `<div class="big-speaker" onclick="speakJudge()">🔊</div>`;
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(`Definition: ${currentWord.d}`);
                 msg.rate = 0.5;
                 msg.onend = () => {
-                    hintBox.innerText = "Giám khảo đọc xong! 10s bấm Mic!";
+                    hintBox.innerText = "Gợi ý xong! 10s để bấm Micro!";
                     startCountdown(10, () => {
                         document.getElementById('mic-container').style.display = 'flex';
                     }, () => {
@@ -548,11 +607,11 @@
         function startCountdown(seconds, onStart, onEnd) {
             if (onStart) onStart();
             let timeLeft = seconds;
-            document.getElementById('round-timer-box').innerText = `Thời gian: ${timeLeft}s`;
+            document.getElementById('round-timer-box').innerText = `Thời gian chuẩn bị: ${timeLeft}s`;
             
             roundTimer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('round-timer-box').innerText = `Thời gian: ${timeLeft}s`;
+                document.getElementById('round-timer-box').innerText = `Thời gian chuẩn bị: ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
                     if (onEnd) onEnd();
@@ -560,25 +619,15 @@
             }, 1000);
         }
 
-        function requestSpeech() {
-            clearInterval(roundTimer);
-            document.getElementById('mic-container').style.display = 'none';
-            const countdownEl = document.getElementById('ready-countdown');
-            countdownEl.style.display = 'block';
-            let count = 3;
-            countdownEl.innerText = count;
-            
-            readyCountdownInterval = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownEl.innerText = count;
-                } else {
-                    clearInterval(readyCountdownInterval);
-                    countdownEl.style.display = 'none';
-                    document.getElementById('mic-container').style.display = 'flex';
-                    toggleSpeech();
-                }
-            }, 1000);
+        function toggleSpeech() {
+            if (!recognition) return alert("Trình duyệt không hỗ trợ Mic.");
+            if (isListening) {
+                stopSpeakingCountdown();
+                recognition.stop();
+            } else {
+                clearInterval(roundTimer); 
+                recognition.start();
+            }
         }
 
         function forceSkip(msg) {
@@ -589,22 +638,6 @@
             setTimeout(nextQuestion, 3500);
         }
 
-        function toggleSpeech() {
-            if (!recognition) return;
-            if (isListening) {
-                clearTimeout(silenceTimer);
-                recognition.stop();
-            } else {
-                recognition.start();
-                silenceTimer = setTimeout(() => {
-                    if (isListening && fullTranscript === "") {
-                        recognition.stop();
-                        forceSkip("Bạn không trả lời kịp.");
-                    }
-                }, 4500); 
-            }
-        }
-
         function validateSpeech(transcript) {
             const word = currentWord.w.toLowerCase();
             const feedback = document.getElementById('round-feedback');
@@ -613,12 +646,17 @@
             const keywordOccurrences = wordsArray.filter(v => v === word).length;
             
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
-                feedback.innerText = "CHÍNH XÁC! 🌟";
+                feedback.innerText = "CHÍNH XÁC! TUYỆT VỜI 🌟";
                 feedback.style.color = "green";
+                
+                // Cộng điểm cho vòng hiện tại
+                currentScores[currentMode]++;
+                updateScoreUI();
+                
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2500);
             } else {
-                feedback.innerText = "Cố lên! Nói đúng cấu trúc con nhé!";
+                feedback.innerText = "Chưa đúng cấu trúc. Con thử lại nhé!";
                 feedback.style.color = "red";
             }
         }
@@ -643,17 +681,17 @@
 
             let timeLeft = 60;
             const timerEl = document.getElementById('memory-timer');
-            timerEl.innerText = `Ghi nhớ các từ sau: ${timeLeft}s`;
+            timerEl.innerText = `Ghi nhớ danh sách này trong: ${timeLeft}s`;
 
             const contentArea = document.querySelector('.content-area');
             if(contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
 
             roundTimer = setInterval(() => {
                 timeLeft--;
-                timerEl.innerText = `Ghi nhớ các từ sau: ${timeLeft}s`;
+                timerEl.innerText = `Ghi nhớ danh sách này trong: ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(roundTimer);
-                    timerEl.innerText = "HẾT GIỜ! CON HÃY NÓI LẠI CÁC TỪ";
+                    timerEl.innerText = "HẾT GIỜ! CON HÃY ĐỌC LẠI CÁC TỪ";
                     listEl.style.display = "none";
                     speakText("Time is up. Tell me the words you remembered.", 0.5);
                 }
