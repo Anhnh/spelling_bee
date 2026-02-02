@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no">
     <title>Spelling Bee Master - Luyện Thi Lớp 2</title>
     <style>
         :root {
@@ -12,16 +12,16 @@
             --danger: #e74c3c;
             --bg: #fdfcf0;
             --card-bg: #ffffff;
+            --text-main: #2c3e50;
         }
 
-        /* Tối ưu hóa cho iPhone: Tránh dùng 100vh cố định gây giật trang */
         html, body {
             background-color: var(--bg);
             margin: 0;
             padding: 0;
             color: #333;
-            -webkit-overflow-scrolling: touch; /* Giúp cuộn mượt hơn trên iOS */
-            height: auto;
+            -webkit-overflow-scrolling: touch;
+            height: 100%;
         }
 
         body {
@@ -29,161 +29,227 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 101vh; /* Đảm bảo luôn có thể cuộn nhẹ để tránh giật */
         }
 
+        /* Container thu gọn để tối ưu diện tích màn hình */
         .container {
-            width: 92%;
-            max-width: 900px;
+            width: 100%;
+            max-width: 600px;
             background: var(--card-bg);
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             text-align: center;
-            border: 4px solid #f1c40f;
             box-sizing: border-box;
             position: relative;
         }
 
-        h1 { color: #d35400; margin-bottom: 15px; font-size: 1.8rem; }
-
-        .nav-menu {
+        /* Thanh điều hướng dạng Tab siêu gọn */
+        .nav-tabs {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            background: #eee;
+            margin: 0;
+            padding: 5px;
+            gap: 5px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .nav-btn {
-            padding: 12px 15px;
-            font-size: 14px;
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            color: #666;
+            transition: 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* Welcome Overlay để kích hoạt âm thanh */
+        #welcome-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Practice Card Styles */
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .img-display {
+            width: 100%;
+            height: auto;
+            max-height: 35vh; /* Tối ưu để không che mất chữ trên iPhone */
+            object-fit: contain;
+            display: block;
+        }
+
+        .btn-listen-again {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .word-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 5px 0;
+        }
+
+        .def-text {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+            min-height: 44px;
+            padding: 0 10px;
+        }
+
+        /* Timer & Controls */
+        .timer-line { width: 100%; height: 6px; background: #eee; border-radius: 3px; margin-bottom: 15px; overflow: hidden; }
+        .timer-fill { height: 100%; background: var(--secondary); width: 100%; transition: width 1s linear; }
+
+        .control-btns { display: flex; gap: 10px; justify-content: center; margin-top: auto; padding-bottom: 20px; }
+        
+        .main-btn {
+            padding: 15px 30px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
             color: white;
-            box-shadow: 0 3px #999;
-            flex: 1 1 120px;
-            max-width: 200px;
-            -webkit-tap-highlight-color: transparent;
+            background: var(--primary);
+            box-shadow: 0 4px #2980b9;
         }
+        .main-btn:active { transform: translateY(2px); box-shadow: 0 2px #2980b9; }
 
-        .nav-btn:active { transform: translateY(3px); box-shadow: 0 0 #666; }
-        
-        .btn-practice { background: #27ae60; }
-        .btn-round1 { background: #3498db; }
-        .btn-round2 { background: #9b59b6; }
-
-        .game-area { display: none; animation: fadeIn 0.4s ease; width: 100%; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Practice Style */
-        .practice-card { padding: 10px; border-radius: 15px; background: #fffcf2; border: 2px solid #eee; box-sizing: border-box; }
-        
-        .img-display { 
-            width: 100%; 
-            max-width: 500px; 
-            height: auto;
-            max-height: 40vh;
-            object-fit: contain; 
-            border-radius: 12px; 
-            background: #fff; 
-            margin: 0 auto 15px; 
-            border: 1px solid #ddd;
-            display: block;
-        }
-
-        .word-title { 
-            font-size: 32px; 
-            font-weight: 900; 
-            color: #2c3e50; 
-            text-transform: uppercase; 
-            letter-spacing: 4px; 
-            margin: 10px 0; 
-        }
-
-        .def-text { 
-            font-size: 18px; 
-            color: #555; 
-            line-height: 1.4; 
-            font-style: italic; 
-            min-height: 40px; 
-            padding: 0 10px; 
-        }
-        
-        .timer-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 15px 0; overflow: hidden; }
-        .timer-bar { height: 100%; background: var(--secondary); width: 100%; transition: width 1s linear; }
-
-        /* Testing Style */
-        .mic-container { margin: 20px 0; }
+        /* Testing Mode Styles */
         .mic-btn {
             width: 80px; height: 80px; border-radius: 50%; border: none;
-            background: var(--danger); color: white; font-size: 30px; cursor: pointer;
-            box-shadow: 0 5px #c0392b; transition: 0.2s;
-            outline: none;
+            background: var(--danger); color: white; font-size: 30px;
+            box-shadow: 0 5px #c0392b; margin: 15px 0;
         }
         .mic-btn.listening { background: var(--success); box-shadow: 0 0 20px var(--success); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
         .transcript-box {
-            background: #f1f2f6; padding: 15px; border-radius: 12px;
-            margin: 15px auto; width: 90%; border: 2px dashed #3498db;
-            font-size: 18px; font-weight: bold; min-height: 30px; color: #2f3542;
-            box-sizing: border-box;
-            word-wrap: break-word;
+            background: #f8f9fa; padding: 12px; border-radius: 10px;
+            border: 2px dashed #ddd; font-size: 16px; font-weight: bold;
+            min-height: 40px; margin: 10px 0;
         }
 
-        .feedback-text { font-size: 20px; font-weight: bold; margin: 15px 0; height: 25px; }
-        .audio-trigger { font-size: 70px; cursor: pointer; color: var(--primary); -webkit-tap-highlight-color: transparent; }
-        
-        .skip-btn { background: #bdc3c7; box-shadow: 0 3px #95a5a6; margin-top: 15px; width: 150px; }
+        .feedback-msg { font-size: 18px; font-weight: bold; height: 24px; margin: 10px 0; }
 
         @media (max-width: 480px) {
-            h1 { font-size: 1.4rem; }
-            .word-title { font-size: 26px; }
-            .img-display { max-height: 40vh; }
+            .word-title { font-size: 28px; }
+            .container { padding: 0; }
+            .content-area { padding: 10px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🐝 SPELLING BEE MASTER 🐝</h1>
-        
-        <div class="nav-menu">
-            <button class="nav-btn btn-practice" onclick="initPractice()">📖 LUYỆN TẬP</button>
-            <button class="nav-btn btn-round1" onclick="initRound(1)">🎯 VÒNG 1</button>
-            <button class="nav-btn btn-round2" onclick="initRound(2)">🔊 VÒNG 2</button>
+        <!-- Welcome Screen -->
+        <div id="welcome-overlay">
+            <div style="font-size: 80px; margin-bottom: 20px;">🐝</div>
+            <h2 style="color: #d35400;">Spelling Bee Master</h2>
+            <p style="color: #7f8c8d; text-align: center;">Chào con gái! Bấm nút bên dưới để bắt đầu luyện thi nhé.</p>
+            <button class="main-btn" style="background: var(--success); box-shadow: 0 4px #27ae60;" onclick="startApp()">BẮT ĐẦU HỌC</button>
         </div>
 
-        <!-- Practice Section -->
-        <div id="section-practice" class="game-area">
-            <div class="practice-card">
-                <div id="practice-timer-info" style="font-weight: bold; color: var(--danger); margin-bottom: 5px; font-size: 14px;">Tiếp theo trong: 60s</div>
-                <div class="timer-container"><div id="practice-progress" class="timer-bar"></div></div>
-                <div id="practice-body"></div>
-                <button class="nav-btn btn-practice" onclick="manualNextPractice()">TỪ TIẾP THEO ➔</button>
-            </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs" id="main-nav" style="display: none;">
+            <button id="tab-practice" class="tab-btn active" onclick="initPractice()">📖 LUYỆN TẬP</button>
+            <button id="tab-round1" class="tab-btn" onclick="initRound(1)">🎯 VÒNG 1</button>
+            <button id="tab-round2" class="tab-btn" onclick="initRound(2)">🔊 VÒNG 2</button>
         </div>
 
-        <!-- Rounds Section -->
-        <div id="section-play" class="game-area">
-            <h2 id="round-display-title" style="color: #34495e; font-size: 1.2rem; margin: 10px 0;"></h2>
-            <div id="visual-content"></div>
-            
-            <div class="mic-container">
-                <p style="color: #7f8c8d; font-size: 14px;">Nói: <b>[Từ] - [Đánh vần] - [Từ]</b></p>
-                <button id="mic-btn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
-                <div id="mic-status" style="margin-top: 8px; color: #7f8c8d; font-weight: bold; font-size: 14px;">Bấm Mic để nói</div>
+        <div class="content-area">
+            <!-- Practice Section -->
+            <div id="section-practice" class="game-area" style="display: none;">
+                <div class="timer-line"><div id="practice-progress" class="timer-fill"></div></div>
+                <div id="practice-timer-text" style="font-size: 12px; color: #999; margin-bottom: 10px;">Chuyển sau: 60s</div>
+                
+                <div class="img-wrapper">
+                    <img id="p-img" src="" class="img-display" onerror="this.src='https://placehold.co/500x350?text=Image+Loading...'">
+                    <div class="btn-listen-again" onclick="replayPractice()">🔊</div>
+                </div>
+                
+                <div id="p-word" class="word-title">WORD</div>
+                <div id="p-def" class="def-text">Definition goes here...</div>
+                
+                <div class="control-btns">
+                    <button class="main-btn" onclick="manualNextPractice()">TỪ TIẾP THEO ➔</button>
+                </div>
             </div>
 
-            <div class="transcript-box" id="transcript-display">Đang nghe: ...</div>
-            <div id="round-feedback" class="feedback-text"></div>
-            
-            <button class="nav-btn skip-btn" onclick="nextQuestion()">BỎ QUA</button>
+            <!-- Testing Section -->
+            <div id="section-play" class="game-area" style="display: none;">
+                <h3 id="round-title" style="margin: 5px 0; color: var(--primary); font-size: 16px;"></h3>
+                
+                <div id="visual-content" style="margin-top: 10px;"></div>
+                
+                <div class="mic-section">
+                    <p style="font-size: 13px; color: #888; margin: 10px 0;">Hãy nói: <b>[Từ] - [Đánh vần] - [Từ]</b></p>
+                    <button id="mic-btn" class="mic-btn" onclick="toggleSpeech()">🎤</button>
+                    <div id="mic-status" style="font-size: 13px; font-weight: bold; color: #999;">Bấm Mic để trả lời</div>
+                </div>
+
+                <div class="transcript-box" id="transcript-display">Con hãy nói...</div>
+                <div id="round-feedback" class="feedback-msg"></div>
+                
+                <div class="control-btns">
+                    <button class="main-btn" style="background: #bdc3c7; box-shadow: 0 4px #95a5a6; padding: 10px 20px;" onclick="nextQuestion()">BỎ QUA</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -278,24 +344,42 @@
         let practiceTimer, autoNextInterval;
         let isListening = false;
         let recognition;
+        let silenceTimer; 
+        let fullTranscript = ""; 
 
-        // Cấu hình Speech Recognition
         if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
             const SpeechRecognition = window.webkitSpeechRecognition || window.speechRecognition;
             recognition = new SpeechRecognition();
-            recognition.continuous = false;
+            recognition.continuous = true;
+            recognition.interimResults = true;
             recognition.lang = 'en-US';
 
             recognition.onstart = () => {
                 isListening = true;
+                fullTranscript = "";
                 document.getElementById('mic-btn').classList.add('listening');
                 document.getElementById('mic-status').innerText = "Đang nghe...";
             };
 
             recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript.toLowerCase();
-                document.getElementById('transcript-display').innerText = "Con nói: " + transcript;
-                validateSpeech(transcript);
+                clearTimeout(silenceTimer);
+                let interimTranscript = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        fullTranscript += event.results[i][0].transcript + " ";
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                const displayTranscript = (fullTranscript + interimTranscript).toLowerCase();
+                document.getElementById('transcript-display').innerText = "Con nói: " + displayTranscript;
+                
+                silenceTimer = setTimeout(() => {
+                    if (isListening) {
+                        recognition.stop();
+                        validateSpeech(displayTranscript);
+                    }
+                }, 3500); 
             };
 
             recognition.onend = () => {
@@ -307,13 +391,14 @@
 
         function hideAll() {
             document.querySelectorAll('.game-area').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             clearInterval(practiceTimer);
             clearInterval(autoNextInterval);
+            clearTimeout(silenceTimer);
             window.speechSynthesis.cancel();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Trộn mảng Fisher-Yates
         function shuffleArray(array) {
             let shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
@@ -323,12 +408,19 @@
             return shuffled;
         }
 
+        function startApp() {
+            document.getElementById('welcome-overlay').style.display = 'none';
+            document.getElementById('main-nav').style.display = 'flex';
+            initPractice();
+        }
+
         function initPractice() {
             hideAll();
             currentMode = 'practice';
+            document.getElementById('tab-practice').classList.add('active');
             practiceList = shuffleArray(wordList); 
             practiceIdx = 0;
-            document.getElementById('section-practice').style.display = 'block';
+            document.getElementById('section-practice').style.display = 'flex';
             renderPractice();
         }
 
@@ -337,15 +429,12 @@
             clearInterval(autoNextInterval);
             
             const item = practiceList[practiceIdx];
-            const body = document.getElementById('practice-body');
-            body.innerHTML = `
-                <img src="${item.img}" class="img-display" onerror="this.src='https://placehold.co/500x350?text=Chua+Co+Anh'">
-                <div class="word-title">${item.w}</div>
-                <div class="def-text">${item.d}</div>
-            `;
+            document.getElementById('p-img').src = item.img;
+            document.getElementById('p-word').innerText = item.w;
+            document.getElementById('p-def').innerText = item.d;
 
-            // Đồng bộ tốc độ 0.5 cho luyện tập
-            speakText(`${item.w}. ${item.d}`, 0.5);
+            // Đọc từ đầu tiên
+            replayPractice();
 
             let timeLeft = 60;
             const progress = document.getElementById('practice-progress');
@@ -354,9 +443,15 @@
             autoNextInterval = setInterval(() => {
                 timeLeft--;
                 progress.style.width = (timeLeft / 60 * 100) + '%';
-                document.getElementById('practice-timer-info').innerText = `Tiếp theo trong: ${timeLeft}s`;
+                document.getElementById('practice-timer-info').innerText = `Chuyển sau: ${timeLeft}s`;
                 if (timeLeft <= 0) manualNextPractice();
             }, 1000);
+        }
+
+        function replayPractice() {
+            window.speechSynthesis.cancel();
+            const item = practiceList[practiceIdx];
+            speakText(`${item.w}. ${item.d}`, 0.5);
         }
 
         function manualNextPractice() {
@@ -367,7 +462,8 @@
         function initRound(round) {
             hideAll();
             currentMode = 'round' + round;
-            document.getElementById('section-play').style.display = 'block';
+            document.getElementById('tab-round' + round).classList.add('active');
+            document.getElementById('section-play').style.display = 'flex';
             nextQuestion();
         }
 
@@ -376,12 +472,12 @@
             document.getElementById('transcript-display').innerText = "...";
             currentWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-            const title = document.getElementById('round-display-title');
+            const title = document.getElementById('round-title');
             const visual = document.getElementById('visual-content');
 
             if (currentMode === 'round1') {
                 title.innerText = "Vòng 1: Nhìn Tranh Đoán Từ";
-                visual.innerHTML = `<img src="${currentWord.img}" class="img-display" style="max-height:35vh;">`;
+                visual.innerHTML = `<img src="${currentWord.img}" class="img-display" style="max-height:30vh;">`;
             } else {
                 title.innerText = "Vòng 2: Nghe Định Nghĩa";
                 visual.innerHTML = `
@@ -394,14 +490,17 @@
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            // Đồng bộ tốc độ 0.5 cho giám khảo
             speakText(`Your word is: ${currentWord.w}. Definition: ${currentWord.d}.`, 0.5); 
         }
 
         function toggleSpeech() {
             if (!recognition) return alert("Trình duyệt không hỗ trợ Micro.");
-            if (isListening) recognition.stop();
-            else recognition.start();
+            if (isListening) {
+                clearTimeout(silenceTimer);
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
         }
 
         function validateSpeech(transcript) {
@@ -414,7 +513,6 @@
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
                 feedback.innerText = "CHÍNH XÁC! 🌟";
                 feedback.style.color = "green";
-                // Lời khen cũng đồng bộ tốc độ chậm
                 speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2000);
             } else {
@@ -430,7 +528,6 @@
             window.speechSynthesis.speak(utter);
         }
 
-        window.onload = initPractice;
     </script>
 </body>
 </html>
