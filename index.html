@@ -21,6 +21,7 @@
             padding: 0;
             color: #333;
             -webkit-overflow-scrolling: touch; /* Giúp cuộn mượt hơn trên iOS */
+            height: auto;
         }
 
         body {
@@ -28,7 +29,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 101%; /* Đảm bảo luôn có thể cuộn nhẹ để tránh giật */
+            min-height: 101vh; /* Đảm bảo luôn có thể cuộn nhẹ để tránh giật */
         }
 
         .container {
@@ -86,7 +87,7 @@
             width: 100%; 
             max-width: 500px; 
             height: auto;
-            max-height: 45vh;
+            max-height: 40vh;
             object-fit: contain; 
             border-radius: 12px; 
             background: #fff; 
@@ -272,7 +273,7 @@
 
         let currentMode = ''; 
         let currentWord = {};
-        let practiceList = []; // Danh sách đã trộn
+        let practiceList = []; 
         let practiceIdx = 0;
         let practiceTimer, autoNextInterval;
         let isListening = false;
@@ -309,7 +310,6 @@
             clearInterval(practiceTimer);
             clearInterval(autoNextInterval);
             window.speechSynthesis.cancel();
-            // Cuộn lên đầu container nhẹ nhàng khi chuyển chế độ
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -326,7 +326,7 @@
         function initPractice() {
             hideAll();
             currentMode = 'practice';
-            practiceList = shuffleArray(wordList); // Trộn từ khi bắt đầu luyện tập
+            practiceList = shuffleArray(wordList); 
             practiceIdx = 0;
             document.getElementById('section-practice').style.display = 'block';
             renderPractice();
@@ -344,7 +344,7 @@
                 <div class="def-text">${item.d}</div>
             `;
 
-            // Tốc độ 0.5 (Chậm hơn yêu cầu)
+            // Đồng bộ tốc độ 0.5 cho luyện tập
             speakText(`${item.w}. ${item.d}`, 0.5);
 
             let timeLeft = 60;
@@ -394,7 +394,8 @@
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            speakText(`Your word is: ${currentWord.w}. Definition: ${currentWord.d}.`, 0.6); // Vòng thi đọc nhanh hơn luyện tập một chút
+            // Đồng bộ tốc độ 0.5 cho giám khảo
+            speakText(`Your word is: ${currentWord.w}. Definition: ${currentWord.d}.`, 0.5); 
         }
 
         function toggleSpeech() {
@@ -413,7 +414,8 @@
             if (keywordOccurrences >= 2 || (transcript.includes(word) && transcript.length > word.length + 4)) {
                 feedback.innerText = "CHÍNH XÁC! 🌟";
                 feedback.style.color = "green";
-                speakText("Excellent!", 0.9);
+                // Lời khen cũng đồng bộ tốc độ chậm
+                speakText("Excellent!", 0.5);
                 setTimeout(nextQuestion, 2000);
             } else {
                 feedback.innerText = "Nói lại: Từ - Đánh vần - Từ";
@@ -428,7 +430,6 @@
             window.speechSynthesis.speak(utter);
         }
 
-        // Tự động khởi động chế độ luyện tập
         window.onload = initPractice;
     </script>
 </body>
