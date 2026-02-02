@@ -45,6 +45,7 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
+        /* Nav Tabs siêu gọn */
         .nav-tabs {
             display: flex;
             background: #f1f1f1;
@@ -98,6 +99,7 @@
 
         .game-area { display: none; flex-direction: column; height: 100%; }
 
+        /* Styles ảnh và nội dung */
         .img-wrapper {
             width: 100%;
             background: #fff;
@@ -117,28 +119,36 @@
         .word-title { font-size: 32px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 3px; margin: 10px 0; }
         .def-text { font-size: 16px; color: #555; line-height: 1.4; font-style: italic; margin-bottom: 15px; }
 
-        .timer-info { 
-            font-size: 16px; 
-            font-weight: bold; 
-            color: var(--danger); 
-            margin-bottom: 5px; 
-            background: #fff5f5;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #fed7d7;
-            text-align: center;
+        /* Hàng thông tin đồng bộ (Điểm & Thời gian) */
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        /* Bảng điểm */
+        .timer-info { 
+            flex: 1;
+            font-size: 14px; 
+            font-weight: bold; 
+            color: var(--danger); 
+            background: #fff5f5;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #fed7d7;
+            text-align: left; /* Đếm ngược bên trái */
+        }
+
         .score-display {
-            font-size: 18px;
+            flex: 1;
+            font-size: 14px;
             font-weight: bold;
             color: var(--success);
-            margin-bottom: 10px;
-            text-align: center;
+            text-align: right; /* Điểm bên phải */
             background: #f0fff4;
-            padding: 5px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 10px;
             border: 1px solid #c6f6d5;
         }
 
@@ -153,6 +163,7 @@
             border-radius: 4px;
         }
 
+        /* Mic & Feedback */
         .mic-section { display: flex; flex-direction: column; align-items: center; margin: 10px 0; }
         .mic-btn {
             width: 85px; height: 85px; border-radius: 50%; border: none;
@@ -173,6 +184,7 @@
 
         .feedback-msg { font-size: 19px; font-weight: bold; min-height: 28px; margin: 10px 0; text-align: center; }
 
+        /* Vòng 4 Ghi nhớ */
         .memory-list { 
             display: flex; 
             flex-direction: column; 
@@ -245,7 +257,7 @@
         <div class="content-area">
             <!-- PHẦN HỌC (Practice) -->
             <div id="section-practice" class="game-area">
-                <div id="practice-timer-text" class="timer-info">Chuyển sau: 60s</div>
+                <div id="practice-timer-text" class="timer-info" style="text-align: center;">Chuyển sau: 60s</div>
                 <div class="img-wrapper">
                     <img id="p-img" src="" class="img-display">
                     <div style="position:absolute; bottom:15px; right:15px; background:var(--primary); color:white; border-radius:50%; width:55px; height:55px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white; z-index: 5;" onclick="replayPractice()">🔊</div>
@@ -257,8 +269,11 @@
 
             <!-- PHẦN THI (Rounds 1, 2, 3) -->
             <div id="section-play" class="game-area">
-                <div id="round-score-display" class="score-display">Điểm của con: 0</div>
-                <div id="round-timer-box" class="timer-info">...</div>
+                <div class="stats-row">
+                    <div id="round-timer-box" class="timer-info">Thời gian: 0s</div>
+                    <div id="round-score-display" class="score-display">Điểm: 0</div>
+                </div>
+                
                 <div id="round-status-hint" style="font-size: 14px; color: #444; font-weight: bold; margin-bottom: 10px; background: #ebf4ff; padding: 10px; border-radius: 8px; text-align: center;"></div>
                 
                 <div class="img-wrapper">
@@ -278,7 +293,7 @@
 
             <!-- PHẦN GHI NHỚ (Round 4) -->
             <div id="section-memory" class="game-area">
-                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 50; border-radius: 0 0 15px 15px;">Ghi nhớ trong: 60s</div>
+                <div id="memory-timer" class="timer-info" style="font-size: 18px; position: sticky; top: 0; z-index: 50; border-radius: 0 0 15px 15px; text-align: center;">Ghi nhớ trong: 60s</div>
                 <div id="memory-list" class="memory-list"></div>
             </div>
         </div>
@@ -288,84 +303,84 @@
         const wordList = [
             {w: "vet", d: "A doctor who takes care of sick animals.", img: "https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/12/vet-logo.jpeg"},
             {w: "chef", d: "A person who cooks food in a restaurant.", img: "https://plus.unsplash.com/premium_vector-1682298101057-5a52c70a669f?q=80&w=866&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
-            {w: "river", d: "A long, flowing body of water.", img: "https://static.toiimg.com/thumb/116331344/River-destinations-in-India.jpg?width=636&height=358&resize=4"},
-            {w: "cake", d: "A sweet baked dessert for birthdays.", img: "https://plus.unsplash.com/premium_photo-1713447395823-2e0b40b75a89?q=80&w=682&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
-            {w: "soda", d: "A sweet, bubbly drink.", img: "https://images.squarespace-cdn.com/content/v1/5c4b37d2365f0291e539e6bd/1548434619978-XAL2Z552XTDSADA9AHXD/image-asset.jpeg?format=2500w"},
+            {w: "river", d: "A long line of water that flows to the sea.", img: "https://static.toiimg.com/thumb/116331344/River-destinations-in-India.jpg?width=636&height=358&resize=4"},
+            {w: "cake", d: "A sweet food we eat at birthday parties.", img: "https://plus.unsplash.com/premium_photo-1713447395823-2e0b40b75a89?q=80&w=682&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
+            {w: "soda", d: "A sweet drink with bubbles.", img: "https://images.squarespace-cdn.com/content/v1/5c4b37d2365f0291e539e6bd/1548434619978-XAL2Z552XTDSADA9AHXD/image-asset.jpeg?format=2500w"},
             {w: "socks", d: "You wear these on your feet inside shoes.", img: "https://www.crazysocks.com/cdn/shop/products/rainbow-metallic-socks-small_400x.jpg?v=1595977722"},
-            {w: "bank", d: "A place where people keep their money.", img: "https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-regulatory-office-currency-bank-financial-sector-png-image_368241.jpg"},
+            {w: "bank", d: "A place where people keep their money safe.", img: "https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-regulatory-office-currency-bank-financial-sector-png-image_368241.jpg"},
             {w: "milk", d: "A white drink that comes from cows.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYbO8jhE0xgrENfXeS6H6K_a08oLL9s5cyeg&s"},
-            {w: "tiger", d: "A large orange wild cat with stripes.", img: "https://media.istockphoto.com/id/1420676204/photo/portrait-of-a-royal-bengal-tiger-alert-and-staring-at-the-camera-national-animal-of-bangladesh.jpg?s=612x612&w=0&k=20&c=0OCYv99Ktv3fJ-YYlg7SetHBJj3pIk58WY7GDy5VCtI="},
-            {w: "zebra", d: "An animal with black and white stripes.", img: "https://img.freepik.com/free-vector/cute-zebra-cartoon-vector-illustration_1308-180723.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "field", d: "A wide area of land with grass.", img: "https://media.istockphoto.com/id/1421187500/photo/a-field-of-corn-at-dusk.jpg?s=612x612&w=0&k=20&c=Mv220j7hl1_pX1SvViqk3noNJPF1SkDZQiBDX1gO44w="},
-            {w: "juice", d: "A drink made from fruits like oranges.", img: "https://media.istockphoto.com/id/158268808/photo/fresh-citrus-juices.jpg?s=612x612&w=0&k=20&c=vflsrO3KXXtWfpOOzNZdBVgeIpLy21-OSUl-QPSgPmU="},
-            {w: "bread", d: "A food made from flour and baked.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOfoIt9rHlWEvEQlIJpYLyUMEpOttn_Q9nEQ&s"},
-            {w: "sleet", d: "A mix of rain and frozen snow.", img: "https://cdn.britannica.com/67/123867-050-9D287BC3/Sleet-ground.jpg"},
-            {w: "pizza", d: "A round bread with cheese and tomato.", img: "https://img.freepik.com/free-photo/pizza-pizza-filled-with-tomatoes-salami-olives_140725-1200.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "ocean", d: "A very large body of salt water.", img: "https://www.greenpeace.org/static/planet4-aotearoa-stateless/2023/11/07eba586-gp1t6j5o_web_size.jpg"},
+            {w: "tiger", d: "A big orange wild cat with black stripes.", img: "https://media.istockphoto.com/id/1420676204/photo/portrait-of-a-royal-bengal-tiger-alert-and-staring-at-the-camera-national-animal-of-bangladesh.jpg?s=612x612&w=0&k=20&c=0OCYv99Ktv3fJ-YYlg7SetHBJj3pIk58WY7GDy5VCtI="},
+            {w: "zebra", d: "An animal that has black and white stripes.", img: "https://img.freepik.com/free-vector/cute-zebra-cartoon-vector-illustration_1308-180723.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "field", d: "A big area of land with green grass.", img: "https://media.istockphoto.com/id/1421187500/photo/a-field-of-corn-at-dusk.jpg?s=612x612&w=0&k=20&c=Mv220j7hl1_pX1SvViqk3noNJPF1SkDZQiBDX1gO44w="},
+            {w: "juice", d: "A healthy drink made from fruit.", img: "https://media.istockphoto.com/id/158268808/photo/fresh-citrus-juices.jpg?s=612x612&w=0&k=20&c=vflsrO3KXXtWfpOOzNZdBVgeIpLy21-OSUl-QPSgPmU="},
+            {w: "bread", d: "A food we use to make sandwiches.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOfoIt9rHlWEvEQlIJpYLyUMEpOttn_Q9nEQ&s"},
+            {w: "sleet", d: "A mix of rain and small bits of ice.", img: "https://cdn.britannica.com/67/123867-050-9D287BC3/Sleet-ground.jpg"},
+            {w: "pizza", d: "A round, flat bread with cheese and tomato.", img: "https://img.freepik.com/free-photo/pizza-pizza-filled-with-tomatoes-salami-olives_140725-1200.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "ocean", d: "A very big area of blue salt water.", img: "https://www.greenpeace.org/static/planet4-aotearoa-stateless/2023/11/07eba586-gp1t6j5o_web_size.jpg"},
             {w: "gift", d: "Something you give on a special day.", img: "https://images.pexels.com/photos/264787/pexels-photo-264787.jpeg?cs=srgb&dl=pexels-pixabay-264787.jpg&fm=jpg"},
             {w: "mask", d: "Something you wear to cover your face.", img: "https://dictionary.cambridge.org/vi/images/thumb/mask_noun_002_22549.jpg?version=6.0.71"},
             {w: "pilot", d: "A person who flies an airplane.", img: "https://media.istockphoto.com/id/2152453318/photo/confident-female-pilot-by-private-jet.jpg?s=612x612&w=0&k=20&c=gFRL-_1Jm5L-cgCpB90k7tSSq6LjwaXjl-OLB_PtpqU="},
-            {w: "scarf", d: "A cloth you wear to stay warm.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNFR_eLICJEddavF5FSe2uwxw4gr8jfzoJyw&s"},
-            {w: "nurse", d: "A person who helps sick people.", img: "https://media.vov.vn/sites/default/files/styles/large/public/2022-05/3621_dieu_duong.jpg"},
+            {w: "scarf", d: "You wear this around your neck to stay warm.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNFR_eLICJEddavF5FSe2uwxw4gr8jfzoJyw&s"},
+            {w: "nurse", d: "A person who helps sick people in a hospital.", img: "https://media.vov.vn/sites/default/files/styles/large/public/2022-05/3621_dieu_duong.jpg"},
             {w: "aunt", d: "The sister of your father or mother.", img: "https://i.postimg.cc/TPCPXfsY/Screenshot-2026-01-30-at-13-18-37.png"},
             {w: "store", d: "A place where you go to buy things.", img: "https://static.vecteezy.com/system/resources/previews/041/641/848/non_2x/shop-store-icon-storefront-building-supermarket-shopping-symbol-flat-illustration-vector.jpg"},
-            {w: "soccer", d: "A sport where you kick a ball.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT84p2do_-aVUPAjNRqDQ1xsMyOIskyAXy0TA&s"},
-            {w: "party", d: "A fun gathering to celebrate.", img: "https://static.vecteezy.com/system/resources/previews/012/744/356/non_2x/cartoon-kids-party-poster-with-big-table-sweets-and-gifts-in-birthday-celebration-illustration-vector.jpg"},
-            {w: "train", d: "A vehicle that travels on tracks.", img: "https://media.istockphoto.com/id/466506979/photo/indian-passenger-train.jpg?s=612x612&w=0&k=20&c=AKcMyvqsam93AnADQaK4hzAMI9bdWOVd8tKoF5Sf10M="},
-            {w: "salad", d: "A mix of raw vegetables.", img: "https://png.pngtree.com/png-vector/20240913/ourmid/pngtree-salad-png-image_12807016.png"},
+            {w: "soccer", d: "A sport where you kick a ball into a net.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT84p2do_-aVUPAjNRqDQ1xsMyOIskyAXy0TA&s"},
+            {w: "party", d: "A fun time when people celebrate something.", img: "https://static.vecteezy.com/system/resources/previews/012/744/356/non_2x/cartoon-kids-party-poster-with-big-table-sweets-and-gifts-in-birthday-celebration-illustration-vector.jpg"},
+            {w: "train", d: "A long vehicle that moves on tracks.", img: "https://media.istockphoto.com/id/466506979/photo/indian-passenger-train.jpg?s=612x612&w=0&k=20&c=AKcMyvqsam93AnADQaK4hzAMI9bdWOVd8tKoF5Sf10M="},
+            {w: "salad", d: "A mix of cold, raw vegetables.", img: "https://png.pngtree.com/png-vector/20240913/ourmid/pngtree-salad-png-image_12807016.png"},
             {w: "school", d: "A place where children go to learn.", img: "https://scontent.fhan5-9.fna.fbcdn.net/v/t39.30808-6/465927299_9497212406973727_8825375467049598245_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFJr1RJHVlvimY0wLSwDokWP5Em_46VzNU_kSb_jpXM1aKtUK4IbfAvgwKh9gG3hqbqWlGFLfn5PKDUxaSx6C-e&_nc_ohc=LMvo7tNapMgQ7kNvwEb-WKS&_nc_oc=AdkHDz4Z_o71G5lZK8RHTQFuclRO-FMP84SkvWO66nwac9aekrLTisRLlvhx1r94SpY&_nc_zt=23&_nc_ht=scontent.fhan5-9.fna&_nc_gid=Upe8v3gPYGCyYqUIm_Dp3A&oh=00_AfpXaQpsvcMdWw-9FfW8xIDwMJ8FLAEbDjZRWqKSanF7Ow&oe=698222B2"},
-            {w: "lizard", d: "A small reptile with a long tail.", img: "https://i.pinimg.com/736x/fb/86/c7/fb86c7e0ecb7104a5e4c11b5fa212920.jpg"},
-            {w: "desert", d: "A very dry place with lots of sand.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN99JwgRDUW5uGqUIVIlb0hvs31FAW6zdi4w&s"},
-            {w: "candle", d: "A stick of wax that gives light.", img: "https://www.shutterstock.com/shutterstock/videos/1107230139/thumb/7.jpg?ip=x480"},
-            {w: "burger", d: "A sandwich with a meat patty.", img: "https://img.freepik.com/free-psd/hand-drawn-burger-illustration_23-2151600197.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "market", d: "A place where people buy food.", img: "https://media.istockphoto.com/id/482806537/vector/market.jpg?s=612x612&w=0&k=20&c=AxYKwT2mH4aCumgTpqbQXtojjNlN4pUNbmuePwDFvPY="},
-            {w: "sausage", d: "Meat shaped like a long tube.", img: "https://img.freepik.com/free-vector/hand-drawn-meat-cartoon-illustration_23-2150621184.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "firefighter", d: "A person who puts out fires.", img: "https://static.vecteezy.com/system/resources/previews/047/783/187/non_2x/a-cartoon-firefighter-wearing-a-red-helmet-and-uniform-is-using-a-hose-to-put-out-a-fire-he-is-smiling-and-appears-to-be-happy-to-be-doing-his-job-free-vector.jpg"},
-            {w: "astronaut", d: "A person who travels into space.", img: "https://www.shutterstock.com/image-vector/cute-cartoon-astronaut-riding-rocket-600nw-2497377733.jpg"},
-            {w: "hopscotch", d: "A game where you hop into squares.", img: "https://static.vecteezy.com/system/resources/thumbnails/046/972/785/small/children-playing-hopscotch-game-illustration-on-a-white-background-vector.jpg"},
-            {w: "playground", d: "An outdoor area for children to play.", img: "https://img.freepik.com/premium-vector/kids-playground-with-tube-slide-climbing-ladder-seesaw-cartoon-landscape_338371-730.jpg?w=360"},
-            {w: "kangaroo", d: "An animal that hops and has a pouch.", img: "https://thumbs.dreamstime.com/b/cheerful-animated-kangaroo-hopping-australian-landscape-joey-cheerful-animated-kangaroo-hopping-363413866.jpg"},
-            {w: "sunglasses", d: "Dark glasses to protect your eyes.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvP8Ml3WI3zNNG7qIqOt6KQxfLLC1eUtEoGQ&s"},
+            {w: "lizard", d: "A small reptile with a long tail and scaly skin.", img: "https://i.pinimg.com/736x/fb/86/c7/fb86c7e0ecb7104a5e4c11b5fa212920.jpg"},
+            {w: "desert", d: "A very dry and hot place with lots of sand.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN99JwgRDUW5uGqUIVIlb0hvs31FAW6zdi4w&s"},
+            {w: "candle", d: "A stick of wax that gives light when it burns.", img: "https://www.shutterstock.com/shutterstock/videos/1107230139/thumb/7.jpg?ip=x480"},
+            {w: "burger", d: "Meat and vegetables inside a round bread bun.", img: "https://img.freepik.com/free-psd/hand-drawn-burger-illustration_23-2151600197.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "market", d: "A place where people buy and sell fresh food.", img: "https://media.istockphoto.com/id/482806537/vector/market.jpg?s=612x612&w=0&k=20&c=AxYKwT2mH4aCumgTpqbQXtojjNlN4pUNbmuePwDFvPY="},
+            {w: "sausage", d: "Meat that looks like a long tube.", img: "https://img.freepik.com/free-vector/hand-drawn-meat-cartoon-illustration_23-2150621184.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "firefighter", d: "A person who puts out fires and wears a red hat.", img: "https://static.vecteezy.com/system/resources/previews/047/783/187/non_2x/a-cartoon-firefighter-wearing-a-red-helmet-and-uniform-is-using-a-hose-to-put-out-a-fire-he-is-smiling-and-appears-to-be-happy-to-be-doing-his-job-free-vector.jpg"},
+            {w: "astronaut", d: "A person who travels into space in a rocket.", img: "https://www.shutterstock.com/image-vector/cute-cartoon-astronaut-riding-rocket-600nw-2497377733.jpg"},
+            {w: "hopscotch", d: "A game where you hop into numbered squares.", img: "https://static.vecteezy.com/system/resources/thumbnails/046/972/785/small/children-playing-hopscotch-game-illustration-on-a-white-background-vector.jpg"},
+            {w: "playground", d: "A place outside where children can play.", img: "https://img.freepik.com/premium-vector/kids-playground-with-tube-slide-climbing-ladder-seesaw-cartoon-landscape_338371-730.jpg?w=360"},
+            {w: "kangaroo", d: "An animal that hops and has a pocket for its baby.", img: "https://thumbs.dreamstime.com/b/cheerful-animated-kangaroo-hopping-australian-landscape-joey-cheerful-animated-kangaroo-hopping-363413866.jpg"},
+            {w: "sunglasses", d: "Dark glasses that protect your eyes from the sun.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvP8Ml3WI3zNNG7qIqOt6KQxfLLC1eUtEoGQ&s"},
             {w: "cousin", d: "The child of your aunt or uncle.", img: "https://i.postimg.cc/T2g20VcD/Screenshot-2026-01-30-at-13-39-03.png"},
             {w: "uncle", d: "The brother of your father or mother.", img: "https://i.postimg.cc/5tLKT2Kg/uncle.jpg"},
-            {w: "cleaner", d: "A person whose job is to clean.", img: "https://thumbs.dreamstime.com/b/cleaning-service-concept-cheerful-cartoon-character-cleaner-woman-holds-dust-brush-lady-vector-illustration-isolated-white-148174676.jpg"},
-            {w: "tennis", d: "A sport with rackets and a yellow ball.", img: "https://media.istockphoto.com/id/1001099474/vector/vector-illustration-of-kid-playing-tennis.jpg?s=612x612&w=0&k=20&c=zwKWXVuuhtNNYHaSyToM9dQ4Mi4svwB8WFBK9_-UJlc="},
-            {w: "cheetah", d: "The fastest land animal with spots.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDLtCfh_-sjnar-06y2Q0R_GDniFmZrUoqcA&s"},
-            {w: "violin", d: "A musical instrument with strings.", img: "https://t3.ftcdn.net/jpg/01/97/07/90/360_F_197079022_PcMRgJwfRkolM2en0ZRkZxyT3wl7OL5d.jpg"},
-            {w: "piano", d: "A large instrument with black/white keys.", img: "https://i.pinimg.com/736x/3c/47/b0/3c47b085ac28aee07d1140819a0c6ad4.jpg"},
-            {w: "gloves", d: "Clothing worn on the hands.", img: "https://png.pngtree.com/png-clipart/20190517/original/pngtree-cartoon-glove-shape-gloves-cartoon-gloves-glove-pattern-png-image_3822899.jpg"},
-            {w: "sweater", d: "Warm clothing for your upper body.", img: "https://i.pinimg.com/736x/b6/28/09/b62809cf00394ab94fc0db7b729d0e1d.jpg"},
-            {w: "sandals", d: "Light shoes worn in summer.", img: "https://img.freepik.com/premium-vector/adorable-cartoon-sandals-pink-blue-yellow-illustration_1324823-13193.jpg"},
-            {w: "subway", d: "An underground train system.", img: "https://t4.ftcdn.co/jpg/03/23/03/35/360_F_323033547_KxnAz5lDWCWqkBicfH7glG9Kinv7WSsh.jpg"},
-            {w: "whistle", d: "A tool that makes a high sound.", img: "https://thumbs.dreamstime.com/b/businessman-coach-blow-whistle-concept-illustration-figure-80735055.jpg"},
-            {w: "tablet", d: "A small flat computer with touch.", img: "https://t4.ftcdn.co/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
-            {w: "dentist", d: "A doctor for your teeth.", img: "https://media.istockphoto.com/id/914817876/vector/doctor-with-happy-healthy-teeth-vector-illustration.jpg?s=612x612&w=0&k=20&c=7vtPzkyKAPG6ITGT-fchWTe8tn-X2Pi2w70VWlkJKxk="},
-            {w: "doctor", d: "A person who helps sick people.", img: "https://www.shutterstock.com/image-vector/male-doctor-smiling-selfconfidence-flat-600nw-2281709217.jpg"},
-            {w: "factory", d: "A building where things are made.", img: "https://img.freepik.com/free-vector/city-drains-flat-background-with-factory-urban-landscape-river-pollution-illustration_1284-62760.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "traffic", d: "Many cars moving on the road.", img: "https://img.freepik.com/free-vector/red-traffic-light-flat-illustration_1284-22959.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "elephant", d: "A very large animal with a trunk.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfET-rB-9jLqphCYaZ7smAeImBWKTHrqAe8A&s"},
-            {w: "flower", d: "The colorful part of a plant.", img: "https://png.pngtree.com/png-vector/20250821/ourmid/pngtree-cartoon-bouquet-of-colorful-flowers-clipart-png-image_17261274.png"},
-            {w: "tornado", d: "A strong spinning wind storm.", img: "https://img.freepik.com/free-vector/hand-drawn-tornado-cartoon-illustration_23-2150597821.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "outback", d: "Wild dry land in Australia.", img: "https://www.shutterstock.com/image-vector/australian-desert-natural-landscape-beautiful-600nw-2583595329.jpg"},
-            {w: "rainbow", d: "A colorful arch in the sky.", img: "https://i.pinimg.com/564x/48/63/8b/48638bbee73ecccbbd77bb78661b023b.jpg"},
-            {w: "popcorn", d: "A snack made from corn.", img: "https://img.freepik.com/premium-vector/cartoon-illustration-popcorn-with-smiling-face-smiling-face_481747-94392.jpg"},
-            {w: "morning", d: "The first part of the day.", img: "https://www.shutterstock.com/shutterstock/videos/1058940629/thumb/1.jpg"},
-            {w: "triangle", d: "A shape with three sides.", img: "https://www.shutterstock.com/image-vector/mascot-illustration-triangle-showing-three-260nw-413888398.jpg"},
-            {w: "evening", d: "The time when it gets dark.", img: "https://img.freepik.com/free-vector/spooky-night-forest-background-with-full-moon_1308-78373.jpg?semt=ais_hybrid&w=740&q=80"},
-            {w: "diamond", d: "A shape with 4 sides or a gem.", img: "https://img.freepik.com/premium-vector/cute-diamonds-sparkling-fine-jewelry-cartoon-vector_1022901-114374.jpg?w=360"},
-            {w: "zookeeper", d: "A person who cares for zoo animals.", img: "https://en.pimg.jp/101/742/111/1/101742111.jpg"},
-            {w: "birthday", d: "The day you were born.", img: "https://www.shutterstock.com/shutterstock/videos/3624383843/thumb/10.jpg?ip=x480"},
-            {w: "restaurant", d: "A place where you eat meals.", img: "https://static.vecteezy.com/system/resources/thumbnails/046/295/316/small_2x/people-sit-and-eat-dinner-in-a-restaurant-2d-animation-free-video.jpg"},
-            {w: "helicopter", d: "An aircraft with spinning blades.", img: "https://www.shutterstock.com/shutterstock/videos/3565979903/thumb/1.jpg?ip=x480"},
-            {w: "aquarium", d: "A place where you see sea animals.", img: "https://c8.alamy.com/comp/2PT10Y3/aquarium-template-hand-drawn-cartoon-flat-illustration-with-family-and-kids-looking-at-underwater-fish-sea-animals-variety-marine-flora-and-fauna-2PT10Y3.jpg"},
-            {w: "lightning", d: "A flash of light in the sky.", img: "https://thumbs.dreamstime.com/b/animation-lightning-striking-electric-discharge-impact-place-magical-energy-flash-yellow-isolated-transparent-315158166.jpg"},
-            {w: "mountain", d: "A very high part of the land.", img: "https://img.freepik.com/premium-vector/cartoon-illustration-mountain-with-trees-mountains_135595-114419.jpg"},
-            {w: "cafeteria", d: "A place in school where you eat.", img: "https://media.istockphoto.com/id/534274095/vector/kids-eating-at-the-school-cafeteria.jpg?s=612x612&w=0&k=20&c=hSCxZl9HWq0eSgxpbmQXphfj9lZ675oiCU3hu9oodCI="},
-            {w: "backpack", d: "A bag you carry on your back.", img: "https://media.istockphoto.com/id/885237532/vector/nice-purple-orange-back-pack.jpg?s=612x612&w=0&k=20&c=9OPeSV0hXKhmoprR-NpEc7GD4vrOSB-eiUqz0HYD6rM="},
-            {w: "butterfly", d: "An insect with colorful wings.", img: "https://media.gettyimages.com/id/472301363/vector/monarch-butterfly.jpg?s=612x612&w=gi&k=20&c=1LQh1cvRHe9694E3XEg3gWvoS9bOhFcTXY93ECS1LT8="},
-            {w: "chocolate", d: "A sweet brown food from cocoa.", img: "https://media.istockphoto.com/id/1352752888/vector/funny-cartoon-chocolate-bar-with-blue-paper-wrapping.jpg?s=612x612&w=0&k=20&c=xyrOUsG8gWDeVbfp8I-IbLiaMUe9apBNMsIFhxAX0WQ="},
-            {w: "rectangle", d: "A shape like a long square.", img: "https://classroomclipart.com/image/static2/preview2/rectangle-shape-cartoon-character-clipart-28342.jpg"},
-            {w: "afternoon", d: "The time between noon and evening.", img: "https://static.vecteezy.com/system/resources/previews/000/413/623/non_2x/vector-a-sunset-view-with-a-boy-running.jpg"}
+            {w: "cleaner", d: "A person whose job is to wash and tidy rooms.", img: "https://thumbs.dreamstime.com/b/cleaning-service-concept-cheerful-cartoon-character-cleaner-woman-holds-dust-brush-lady-vector-illustration-isolated-white-148174676.jpg"},
+            {w: "tennis", d: "A sport where you hit a ball with a racket.", img: "https://media.istockphoto.com/id/1001099474/vector/vector-illustration-of-kid-playing-tennis.jpg?s=612x612&w=0&k=20&c=zwKWXVuuhtNNYHaSyToM9dQ4Mi4svwB8WFBK9_-UJlc="},
+            {w: "cheetah", d: "A very fast wild cat with many black spots.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDLtCfh_-sjnar-06y2Q0R_GDniFmZrUoqcA&s"},
+            {w: "violin", d: "A musical instrument with four strings.", img: "https://t3.ftcdn.net/jpg/01/97/07/90/360_F_197079022_PcMRgJwfRkolM2en0ZRkZxyT3wl7OL5d.jpg"},
+            {w: "piano", d: "A large musical instrument with black and white keys.", img: "https://i.pinimg.com/736x/3c/47/b0/3c47b085ac28aee07d1140819a0c6ad4.jpg"},
+            {w: "gloves", d: "You wear these on your hands to keep warm.", img: "https://png.pngtree.com/png-clipart/20190517/original/pngtree-cartoon-glove-shape-gloves-cartoon-gloves-glove-pattern-png-image_3822899.jpg"},
+            {w: "sweater", d: "Warm clothing you wear on the top of your body.", img: "https://i.pinimg.com/736x/b6/28/09/b62809cf00394ab94fc0db7b729d0e1d.jpg"},
+            {w: "sandals", d: "Light shoes you wear when the weather is hot.", img: "https://img.freepik.com/premium-vector/adorable-cartoon-sandals-pink-blue-yellow-illustration_1324823-13193.jpg"},
+            {w: "subway", d: "A train that travels under the ground.", img: "https://t4.ftcdn.com/jpg/03/23/03/35/360_F_323033547_KxnAz5lDWCWqkBicfH7glG9Kinv7WSsh.jpg"},
+            {w: "whistle", d: "A small tool that makes a loud, high sound.", img: "https://thumbs.dreamstime.com/b/businessman-coach-blow-whistle-concept-illustration-figure-80735055.jpg"},
+            {w: "tablet", d: "A small computer that you can hold in your hands.", img: "https://t4.ftcdn.com/jpg/01/32/82/83/360_F_132828382_znWmJkHEwfJszVgU3E7B31plJsMzRERH.jpg"},
+            {w: "dentist", d: "A doctor who looks after your teeth.", img: "https://media.istockphoto.com/id/914817876/vector/doctor-with-happy-healthy-teeth-vector-illustration.jpg?s=612x612&w=0&k=20&c=7vtPzkyKAPG6ITGT-fchWTe8tn-X2Pi2w70VWlkJKxk="},
+            {w: "doctor", d: "A person who helps you when you are sick.", img: "https://www.shutterstock.com/image-vector/male-doctor-smiling-selfconfidence-flat-600nw-2281709217.jpg"},
+            {w: "factory", d: "A big building where things are made by machines.", img: "https://img.freepik.com/free-vector/city-drains-flat-background-with-factory-urban-landscape-river-pollution-illustration_1284-62760.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "traffic", d: "Many cars moving on the road at the same time.", img: "https://img.freepik.com/free-vector/red-traffic-light-flat-illustration_1284-22959.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "elephant", d: "A very large, gray animal with a long trunk.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfET-rB-9jLqphCYaZ7smAeImBWKTHrqAe8A&s"},
+            {w: "flower", d: "The colorful and beautiful part of a plant.", img: "https://png.pngtree.com/png-vector/20250821/ourmid/pngtree-cartoon-bouquet-of-colorful-flowers-clipart-png-image_17261274.png"},
+            {w: "tornado", d: "A very strong and dangerous spinning wind storm.", img: "https://img.freepik.com/free-vector/hand-drawn-tornado-cartoon-illustration_23-2150597821.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "outback", d: "The wide, dry and wild land in Australia.", img: "https://www.shutterstock.com/image-vector/australian-desert-natural-landscape-beautiful-600nw-2583595329.jpg"},
+            {w: "rainbow", d: "A colorful arch in the sky after it rains.", img: "https://i.pinimg.com/564x/48/63/8b/48638bbee73ecccbbd77bb78661b023b.jpg"},
+            {w: "popcorn", d: "A snack made from corn that we eat at the cinema.", img: "https://img.freepik.com/premium-vector/cartoon-illustration-popcorn-with-smiling-face-smiling-face_481747-94392.jpg"},
+            {w: "morning", d: "The first part of the day when the sun rises.", img: "https://www.shutterstock.com/shutterstock/videos/1058940629/thumb/1.jpg"},
+            {w: "triangle", d: "A shape with three sides and three corners.", img: "https://www.shutterstock.com/image-vector/mascot-illustration-triangle-showing-three-260nw-413888398.jpg"},
+            {w: "evening", d: "The time of day when it starts to get dark.", img: "https://img.freepik.com/free-vector/spooky-night-forest-background-with-full-moon_1308-78373.jpg?semt=ais_hybrid&w=740&q=80"},
+            {w: "diamond", d: "A shape with four sides that looks like a kite.", img: "https://img.freepik.com/premium-vector/cute-diamonds-sparkling-fine-jewelry-cartoon-vector_1022901-114374.jpg?w=360"},
+            {w: "zookeeper", d: "A person who takes care of animals in a zoo.", img: "https://en.pimg.jp/101/742/111/1/101742111.jpg"},
+            {w: "birthday", d: "The special day of the year when you were born.", img: "https://www.shutterstock.com/shutterstock/videos/3624383843/thumb/10.jpg?ip=x480"},
+            {w: "restaurant", d: "A place where you pay to eat a meal.", img: "https://static.vecteezy.com/system/resources/thumbnails/046/295/316/small_2x/people-sit-and-eat-dinner-in-a-restaurant-2d-animation-free-video.jpg"},
+            {w: "helicopter", d: "An aircraft with spinning blades on top.", img: "https://www.shutterstock.com/shutterstock/videos/3565979903/thumb/1.jpg?ip=x480"},
+            {w: "aquarium", d: "A place where you can see many kinds of fish.", img: "https://c8.alamy.com/comp/2PT10Y3/aquarium-template-hand-drawn-cartoon-flat-illustration-with-family-and-kids-looking-at-underwater-fish-sea-animals-variety-marine-flora-and-fauna-2PT10Y3.jpg"},
+            {w: "lightning", d: "A bright flash of light in the sky during a storm.", img: "https://thumbs.dreamstime.com/b/animation-lightning-striking-electric-discharge-impact-place-magical-energy-flash-yellow-isolated-transparent-315158166.jpg"},
+            {w: "mountain", d: "A very high and tall part of the land.", img: "https://img.freepik.com/premium-vector/cartoon-illustration-mountain-with-trees-mountains_135595-114419.jpg"},
+            {w: "cafeteria", d: "A large room in a school where students eat lunch.", img: "https://media.istockphoto.com/id/534274095/vector/kids-eating-at-the-school-cafeteria.jpg?s=612x612&w=0&k=20&c=hSCxZl9HWq0eSgxpbmQXphfj9lZ675oiCU3hu9oodCI="},
+            {w: "backpack", d: "A bag you wear on your back to carry your books.", img: "https://media.istockphoto.com/id/885237532/vector/nice-purple-orange-back-pack.jpg?s=612x612&w=0&k=20&c=9OPeSV0hXKhmoprR-NpEc7GD4vrOSB-eiUqz0HYD6rM="},
+            {w: "butterfly", d: "A beautiful insect with colorful wings.", img: "https://media.gettyimages.com/id/472301363/vector/monarch-butterfly.jpg?s=612x612&w=gi&k=20&c=1LQh1cvRHe9694E3XEg3gWvoS9bOhFcTXY93ECS1LT8="},
+            {w: "chocolate", d: "A sweet, brown food that many children love.", img: "https://media.istockphoto.com/id/1352752888/vector/funny-cartoon-chocolate-bar-with-blue-paper-wrapping.jpg?s=612x612&w=0&k=20&c=xyrOUsG8gWDeVbfp8I-IbLiaMUe9apBNMsIFhxAX0WQ="},
+            {w: "rectangle", d: "A shape with four sides, like a long square.", img: "https://classroomclipart.com/image/static2/preview2/rectangle-shape-cartoon-character-clipart-28342.jpg"},
+            {w: "afternoon", d: "The time of day between lunch and evening.", img: "https://static.vecteezy.com/system/resources/previews/000/413/623/non_2x/vector-a-sunset-view-with-a-boy-running.jpg"}
         ];
 
         let currentMode = ''; 
@@ -493,7 +508,7 @@
             const scoreEl = document.getElementById('round-score-display');
             if (scoreEl) {
                 const modeKey = currentMode;
-                scoreEl.innerText = `Điểm của con: ${currentScores[modeKey] || 0}`;
+                scoreEl.innerText = `Điểm: ${currentScores[modeKey] || 0}`;
             }
         }
 
@@ -707,7 +722,7 @@
 
         function speakJudge() {
             window.speechSynthesis.cancel();
-            speakText(`Definition: ${currentWord.d}`, 0.5);
+            speakText(`Your word is: ${currentWord.d}`, 0.5);
         }
 
     </script>
